@@ -125,3 +125,48 @@ section.categoria{
 .btn-white:hover, .btn-white.active{
     background-color: var(--color-primary);
 }
+
+.title-categoria{
+    color: var(--color-black);
+    margin-left: 5px;
+}
+
+.container-group .card{
+    padding: 15px;
+    cursor: pointer;
+}
+
+.container-img-produto{
+    width: 100px;
+    height: 100px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: var(--color-secondary);
+    border-radius: 15px;
+    margin-right: 20px;
+    flex: none;
+}
+
+.infos-produto{
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+}
+
+.infos-produto .name{
+    font-size: 18px;
+    margin-bottom: 0px;
+    color: var(--color-black);
+}
+
+.infos-produto .description{
+    font-size: 14px;
+    margin-bottom: 5px;
+    color: var(--color-text);
+}
+
+.infos-produto .price{
+    font-size: 16px;
+    margin-bottom: 0px;
+    color: var(--color-primary);
+}
