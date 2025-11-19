@@ -9,6 +9,10 @@ b{
     font-family: 'PoppinsMedium', 'Rubik', sans-serif;
 }
 
+.hidden{
+    display: none !important;
+}
+
 .bg-top{
     position: absolute;
     top: 0px;
@@ -110,6 +114,16 @@ section.categoria{
 .btn-white{
     color: var(--color-black);
     background-color: var(--color-white);
+    border-radius: 20px;
+    padding: 15px 25px;
+    font-size: 20px;
+    box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.1);
+}
+
+.btn-yellow{
+    border: none !important;
+    background-color: var(--color-primary);
+    color: var(--color-black) !important;
     border-radius: 20px;
     padding: 15px 25px;
     font-size: 20px;
@@ -220,3 +234,177 @@ section.categoria{
     padding-top: 2px;
     margin-right: 2px;
 }
+
+.menu-bottom.disabled{
+    justify-content: center;
+    padding: 15px;
+    font-size: 18px;
+}
+
+/* Pagina item, Detalhes do Produto */
+
+.bg-top.details{
+    height: 410px;
+}
+
+.container-voltar{
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none !important;
+    font-size: 18px;
+    color: var(--color-black) !important;
+}
+
+.container-imagem-produto{
+    width: 100%;
+    height: 240px;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: relative;
+    background-color: var(--color-secondary);
+    border-radius: 20px;
+    margin: 0 auto;
+    margin-bottom: 10px;
+}
+
+.sub-title-categoria{
+    color: var(--color-text);
+    margin-left: 5px;
+    font-size: 14px;
+}
+
+.card-opcionais{
+    display: flex;
+    flex-direction: row;
+}
+
+.infos-produto-opcional{
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+}
+
+.infos-produto-opcional .name, .infos-produto-opcional .price{
+    color: var(--color-black);
+}
+
+.opcionais .badge{
+    float: right;
+    background-color: var(--color-secondary);
+    padding: 7px 12px;
+    border-radius: 50px;
+    color: var(--color-black);
+    margin-top: 5px;
+}
+
+.checks{
+    margin-left: 10px;
+}
+
+.container-check{
+    display: block;
+    position: relative;
+    padding-left: 25px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 22px;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.container-check input{
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.checkmark{
+    position: absolute;
+    top: -2px;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    border-radius: 50px;
+    background-color: var(--color-input-out);
+}
+
+.container-check:hover input~.checkmark{
+    background-color: var(--color-text-out);
+}
+
+.container-check input:checked~.checkmark{
+    background-color: var(--color-primary);
+}
+
+.checkmark:after{
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.container-check input:checked~.checkmark:after{
+    display: block;
+}
+
+.container-check .checkmark:after{
+    left: 9px;
+    top: 7px;
+    width: 6px;
+    height: 10px;
+    border: solid var(--color-white);
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+.form-control{
+    background-color: var(--color-white);
+    color: var(--color-black);
+    border-radius: 20px;
+    padding: 15px 25px;
+    font-size: 16px;
+    box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.1) !important;
+    border: none !important;
+    height: 50px;
+}
+
+textarea{
+    height: 150px !important;
+}
+
+.menu-bottom.details{
+    justify-content: space-between;
+    padding: 8px 15px;
+}
+
+.add-carrinho{
+    display: flex;
+    text-align: center;
+    align-items: center;
+    height: 30px;
+    justify-content: center;
+}
+
+.btn-menos, .btn-mais{
+    color: var(--color-black);
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-size: 14px;
+    cursor: pointer;
+    background-color: var(--color-primary-out);
+}
+
+.add-numero-itens{
+    color: var(--color-black);
+    padding: 2px 15px;
+    font-size: 18px;
+}
+
