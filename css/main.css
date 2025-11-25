@@ -579,3 +579,77 @@ textarea{
     font-size: 16px;
     color: var(--color-primary);
 }
+
+/* Pedido */
+
+.card-status-pedido{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 15px;
+}	
+
+.card-status-pedido .infos{
+    padding-left: 15px;
+    padding-right: 15px;
+    font-size: 14px;
+}
+
+.card-status-pedido .name{
+    color: var(--color-black);
+}
+
+.detalhes-produto{
+    flex: 1;
+    padding-left: 5px;
+}
+
+.detalhes-produto-acoes{
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    font-size: 14px;
+    padding: 5px 15px;
+    border-right: 1px solid var(--color-separete);
+    color: var(--color-black);
+}
+
+.detalhes-produto-acoes:last-child{
+    border-right: none;
+}
+
+.detalhes-produto-acoes i{
+    font-size: 18px;
+}
+
+.pedido .name-total{
+    font-size: 14px;
+    color: var(--color-black);
+}
+
+.pedido .price-total{
+    font-size: 16px;
+    color: var(--color-primary);
+}
+
+.card-status-pedido.active{
+    background-color: var(--color-primary-out);
+}
+
+.card-status-pedido.pending{
+    opacity: 0.3;
+}
+
+.card-status-pedido.pending .img-icon-details{
+    width: 30px;
+    height: 30px;
+    font-size: 14px;
+    border-radius: 8px;
+}
+
+.card-status-pedido.cancelado .img-icon-details{
+    background-color: var(--color-red) !important;
+    color: var(--color-white) !important;
+}
