@@ -13,6 +13,10 @@ b{
     display: none !important;
 }
 
+.pr-0{
+    padding-right: 0px !important;
+}
+
 .bg-top{
     position: absolute;
     top: 0px;
@@ -462,10 +466,116 @@ textarea{
     box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.1) !important;
     border: 1px solid #ffe28c;
     display: flex;
-    flex-direction: space-between;
+    justify-content: space-between;
     align-items: center;
 }
 
 .btn-full.voltar{
     justify-content: center;
+}
+
+/* Pagina carrinho */
+
+.bg-top.pedido{
+    height: 180px;
+}
+
+.container-detalhes{
+    display: flex;
+}
+
+.carrinho .detalhes-produto{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.carrinho .infos-produto{
+    flex: 1;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.carrinho .infos-produto .name{
+    font-size: 16px;
+}
+
+.carrinho .infos-produto .price{
+    font-size: 14px;
+    color: var(--color-black);
+}
+
+.carrinho .infos-produto .name-opcional , 
+.carrinho .infos-produto .price-opicional,
+.carrinho .infos-produto .obs-opcional{
+    font-size: 14px;
+    color: var(--color-text);
+    margin-left: 10px;
+}
+
+.carrinho .infos-produto .obs-opcional{
+    margin-right: 75px;
+}
+
+.detalhes-produto-edit{
+    font-size: 14px;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: var(--color-primary);
+    cursor: pointer;
+}
+
+.carrinho .infos-produto .name-tota{
+    font-size: 18px;
+    color: var(--color-black);
+}
+
+.carrinho .infos-produto .price-total{
+    font-size: 18px;
+    color: var(--color-primary);
+}
+
+.card-select{
+    border: 2px dashed var(--color-primary) !important;
+    cursor: pointer;
+}
+
+.color-primary{
+    color: var(--color-primary) !important;
+}
+
+.card-address{
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.img-icon-details{
+    width: 50px;
+    height: 50px;
+    background-color: var(--color-secondary);
+    color: var(--color-black);
+    font-size: 22px;
+    border-radius: 11px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card-address .infos{
+    padding-left: 15px;
+    padding-right: 15px;
+    font-size: 14px;
+}
+
+.card-address .infos .name{
+    color: var(--color-black);
+}
+
+.icon-edit{
+    font-size: 16px;
+    color: var(--color-primary);
 }
