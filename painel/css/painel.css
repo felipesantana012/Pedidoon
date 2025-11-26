@@ -140,3 +140,216 @@ h1.title-page{
    text-align: right;
    color: var(--color-text-out);
 }
+
+/* Tela Pedidos */
+
+.conteudo-inner{
+    margin-top: 50px;
+}
+
+.menus-pedido i{
+    margin-right: 5px;
+}
+
+.menus-pedido a{
+    margin-right: 10px;
+    opacity: 0.6;
+}
+
+.menus-pedido a.active{
+    opacity: 1;
+}
+
+.badge-total-pedidos{
+    display: inline-block;
+    background-color: var(--color-primary-out);
+    border-radius: 50px;
+    font-size: 14px;
+    width: 25px;
+    text-align: center;
+    margin-left: 5px;
+    border: 1px dotted var(--color-white);
+}
+
+
+.numero-pedido{
+    font-size: 16px;
+}
+
+.card-pedido .dropdown{
+float: right;
+z-index: 999 !important;
+}
+
+.info-pedido{
+    font-size: 16px;
+    margin-bottom: 10px;
+    color: var(--color-black);
+}
+
+.info-pedido i{
+    width: 25px;
+    text-align: center;
+}
+
+.info-pedido span{
+    display: block;
+    color: var(--color-text);
+    font-size: 14px;
+}
+
+.separate{
+    height: 1px;
+    background-color: var(--color-text-out);
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.horario-pedido{
+    margin-bottom: 0;
+    font-size: 14px;
+    color: var(--color-text-out);
+}
+
+.total-pedido{
+    text-align: right;
+    margin-bottom: 0;
+    margin-top: 15px;
+    color: var(--color-primary);
+}
+
+.card-pedido{
+    box-shadow: 1px 0px 15px 3px rgba(0,0,0,0.08) !important;
+    border-radius: 0 !important;
+    transition: all 0.3s ease-in-out;
+}
+
+
+.card-pedido:hover {
+    box-shadow: 1px 0px 15px 3px rgba(0,0,0,0.2) !important;
+    background-color: var(--color-background);
+    filter: brightness(108%) contrast(105%); 
+}
+
+.card-pedido::before{
+    content: "";
+    position: absolute;
+    left: 0;
+    height: 10px;
+    width: 100%;
+    top: -7px;
+    background: radial-gradient(circle, transparent, transparent 50%, #ffffff 50%,  #ffffff 100%) -7px -8px / 16px 16px , repeat-x;
+}
+
+.card-pedido::after{
+    content: "";
+    position: absolute;
+    left: 0;
+    height: 10px;
+    width: 100%;
+    bottom: -7px;
+    background: radial-gradient(circle, transparent, transparent 50%, #ffffff 50%,  #ffffff 100%) -15px 2px / 16px 16px , repeat-x;
+}
+
+.card-pedido:hover::before , .card-pedido:hover::after {
+    background-image: radial-gradient(circle, transparent, transparent 50%, var(--color-background) 50%, var(--color-background) 100%) ;
+}
+
+.card-content{
+    cursor: pointer;
+}
+
+.card-pedido-body{
+    height: 140px;
+}
+
+/* MODAL DETALHES */
+
+.modal-content{
+    background: transparent;
+    border: none;
+}
+
+.modal-header{
+    border-bottom: 0;
+    background-color: var(--color-background);
+    border-radius: 0px;
+}
+
+.modal-header::before{
+    content: "";
+    position: absolute;
+    left: 0;
+    height: 10px;
+    width: 100%;
+    top: -8px;
+    background: radial-gradient(circle, transparent, transparent 50%, var(--color-background)50%,  var(--color-background) 100%) -7px -8px / 16px 16px , repeat-x;
+}
+
+.modal-header button{
+    background-color: var(--color-red) !important;
+    color: var(--color-white) !important;
+}
+
+.modal-title{
+    font-size: 18px;
+    color: var(--color-black);
+}
+
+.modal-title .horario-pedido{
+    font-size: 14px;
+    color: var(--color-text);
+    padding-left: 15px;
+}
+
+.modal-body{
+    padding: 0;
+}
+
+.container-dados-pedidos{
+    padding: 20px;
+    padding-bottom: 25px;
+    background-color: var(--color-background) !important;
+}
+
+.container-dados-pedidos .d-flex{
+justify-content: space-between;
+}
+
+.cursor-default{
+    cursor: default !important;
+}
+
+.container-dados-pedidos .info-pedido{
+    font-size: 14px;
+    color: var(--color-text);
+}
+
+.container-itens-pedido{
+    padding: 20px;
+    background-color: var(--color-white);
+}
+
+.container-itens-pedido .card-item{
+    padding: 5px 0px 10px 0px;
+    border-bottom: 1px dashed var(--color-input-out);
+}
+
+.container-itens-pedido .card-item:last-child{
+    border-bottom:none;
+}
+
+.container-itens-pedido::after{
+    content: "";
+    position: absolute;
+    left: 0;
+    height: 10px;
+    width: 100%;
+    margin-top: 17px;
+    background: radial-gradient(circle, transparent, transparent 50%, #ffffff 50%,  #ffffff 100%) -15px 2px / 16px 16px , repeat-x;
+}
+
+.footer-btn{
+    display: flex;
+    justify-content: end;
+}
