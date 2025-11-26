@@ -49,7 +49,6 @@
     top: 0;
     display: flex;
     flex-direction: column;
-    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
 }
 
 .menu-left .menus{
@@ -178,7 +177,11 @@ h1.title-page{
 
 .card-pedido .dropdown{
 float: right;
-z-index: 999 !important;
+}
+
+.dropdown-item{
+    z-index: 99999;
+    font-size: 14px;
 }
 
 .info-pedido{
@@ -352,4 +355,99 @@ justify-content: space-between;
 .footer-btn{
     display: flex;
     justify-content: end;
+}
+
+/* Cardapio */
+
+.card-drag{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.drag-icon{
+    display: flex;
+    width: 25px;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    height: 35px;
+    cursor: grab;
+}
+
+.card-drag .infos{
+    flex: 1;
+    padding-left: 15px;
+    padding-right: 15px;
+    font-size: 16px;
+}
+
+.card-drag .infos .name{
+    color: var(--color-black) !important;
+    text-decoration: none !important;
+}
+
+.actions{
+    display: flex;   
+}
+
+.icon-action{
+    margin-left: 10px;
+    font-size: 16px;
+    color: var(--color-black) !important;
+    text-decoration: none !important;
+    width: 35px;
+    height: 35px;
+    background-color: var(--color-white);
+    border-radius: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    box-shadow: var(--box-shadow);
+}
+
+.icon-action:hover{
+    background-color: var(--color-secondary);
+}
+
+.title-produtos{
+    font-size: 14px;
+    color: var(--color-black);
+}
+
+.drag-icon-produto{
+    display: flex;
+    width: 35px;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    cursor: grab;
+}
+
+.lista-produtos .container-img-produto{
+    display: flex;
+    justify-content: end;
+    align-items: end;
+}
+
+.lista-produtos .infos-produto{
+    flex: 1;
+}
+
+.badge-adicionais{
+    position: absolute;
+    top: 6px;
+    margin-left: 19px;
+    font-size: 12px;
+    background-color: var(--color-primary);
+    color: var(--color-black);
+    width: 20px;
+    height: 20px;
+    border-radius: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
