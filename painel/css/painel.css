@@ -671,9 +671,18 @@ input:checked + .slider:before {
     position: absolute;
     right: -12px;
     top: -12px;
-
 }
 
+/* Relatorios */
+
+.value-card{
+    font-size: 20px;
+    color: var(--color-black);
+}
+
+.card-table, .data-table{
+    font-size: 14px!important;
+}
 
 
 

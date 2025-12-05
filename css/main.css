@@ -550,6 +550,10 @@ textarea{
     color: var(--color-primary) !important;
 }
 
+.color-green{
+    color: var(--color-green) !important;
+}
+
 .card-address{
     cursor: pointer;
     display: flex;
