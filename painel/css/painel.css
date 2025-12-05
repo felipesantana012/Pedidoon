@@ -600,3 +600,81 @@ input:checked + .slider:before {
 .opacity-05{
     opacity: 0.5 !important;
 }
+
+/* Empresa */
+
+.logo-empresa .container-img-sobre{
+    position: relative;
+    margin-top: 0;
+    width: 110px;
+    height: 110px;
+    right: 0;
+    margin-right: 20px;
+}
+
+.logo-empresa .icon-action{
+    position: absolute;
+    right: -10px;
+    bottom: -10px;
+}
+
+.detalhes-empresa{
+    flex: 1;
+}
+
+.detalhes-empresa textarea{
+    height: 250px !important;
+}
+
+.container-cep .form-control{
+    padding-right: 75px;
+}
+
+.container-cep .btn{
+  float: right;
+  margin-top: -45px;
+  margin-right: 10px;
+}
+
+.container-horario{
+    background-color: #ffffff;
+    padding: 20px;
+    box-shadow: var(--box-shadow);
+    border-radius: 30px;
+    position: relative;
+}
+
+.content-horario{
+   display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.content-horario .form-group{
+    flex-grow: 1;
+}
+
+.btn-red{
+    border: none;
+    background-color: var(--color-red);
+    color: var(--color-white) !important;
+    border-radius: 20px;
+    padding: 10px 15px;
+    font-size: 20px;
+    box-shadow: 0px 5px 10px -3px rgba(196, 0, 0, 0.9) !important;
+    margin-top: 0 !important;
+    margin: 10px;
+    transition: all 0.2s ease-in-out;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    right: -12px;
+    top: -12px;
+
+}
+
+
+
+
+
