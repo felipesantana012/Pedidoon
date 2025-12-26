@@ -10,10 +10,12 @@
 
 <body>
 
+
+
     <section class="bg-menu">
         <div class="menu-left">
             <div class="logo">
-                <img src="../img/logo.png" width="100px">
+                <img class="logo-empresa" width="100px">
             </div>
             <div class="menus">
                 <a href="./home.html" class="menu-item active">
@@ -55,10 +57,10 @@
                             </h1>
                             <div class="container-right">
                                 <div class="container-dados">
-                                    <p>Felipe Santana</p>
-                                    <span>felipe@gmail.com</span>
+                                    <p class="nome-empresa"></p>
+                                    <span class="email-empresa"></span>
                                 </div>
-                                <a href="#" class="btn btn-white btn-sm">
+                                <a href="#" class="btn btn-white btn-sm" onclick="app.method.logout()">
                                     <i class="fas fa-sign-out-alt"></i>&nbsp; Sair
                                 </a>
                             </div>
@@ -73,7 +75,9 @@
     </section>
 
 
-    <script type="text/javascript" src="./js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="../js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="../js/app.js"></script>
+    <script type="text/javascript" src="./js/home.js"></script>
 </body>
 
 </html>

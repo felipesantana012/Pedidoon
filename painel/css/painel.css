@@ -684,6 +684,37 @@ input:checked + .slider:before {
     font-size: 14px!important;
 }
 
+/* Modal Upload Lodo */
 
+.modal-cadastro .modal-content{
+    background-color: var(--color-white);
+}
 
+.upload #drop-area{
+    border: 2px dashed var(--color-primary);
+    border-radius: 20px;
+    padding: 70px 30px;
+    background-color: var(--color-white) ;
+    transition: all 0.3s ease-in-out;
+}
+
+.upload #drop-area.highlight{
+    background-color: var(--color-secondary) ;
+}
+
+.upload p{
+    margin-top: 0;
+    color: var(--color-black);
+}
+
+.upload .my-form{
+    margin-bottom: 10px;
+    text-align: center;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.upload #fileElemt{
+    display: none !important;
+}
 
