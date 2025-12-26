@@ -9,6 +9,7 @@ app.method = {
 get: (url, callbackSuccess, callbackError, login = false) => {
 
     try {
+        app.method.loading(true);
         if(app.method.validaToken(login)){
             let xhr = new XMLHttpRequest();
             xhr.open("GET", url);
@@ -19,6 +20,7 @@ get: (url, callbackSuccess, callbackError, login = false) => {
 
             xhr.onreadystatechange = function() {
                 if(this.readyState == 4){
+                    app.method.loading(false);
                     if(this.status == 200 ){
                        return callbackSuccess(JSON.parse(this.responseText));
                     } else {
@@ -35,6 +37,7 @@ get: (url, callbackSuccess, callbackError, login = false) => {
     }
         
     } catch (error) {
+        app.method.loading(false);
         return callbackError(error);
     }    
 
@@ -44,6 +47,7 @@ get: (url, callbackSuccess, callbackError, login = false) => {
 post: (url, dados, callbackSuccess, callbackError, login = false) => {
 
     try {
+        app.method.loading(true);
         if(app.method.validaToken(login)){
             let xhr = new XMLHttpRequest();
             xhr.open("POST", url);
@@ -54,6 +58,7 @@ post: (url, dados, callbackSuccess, callbackError, login = false) => {
 
             xhr.onreadystatechange = function() {
                 if(this.readyState == 4){
+                    app.method.loading(false);
                     if(this.status == 200 ){
                        return callbackSuccess(JSON.parse(this.responseText));
                     } else {
@@ -70,6 +75,7 @@ post: (url, dados, callbackSuccess, callbackError, login = false) => {
     }
         
     } catch (error) {
+        app.method.loading(false);
         return callbackError(error);
     }    
 
@@ -78,6 +84,7 @@ post: (url, dados, callbackSuccess, callbackError, login = false) => {
 upload: (url, dados, callbackSuccess, callbackError, login = false) => {
 
     try {
+        app.method.loading(true);
         if(app.method.validaToken(login)){
             let xhr = new XMLHttpRequest();
             xhr.open("POST", url);
@@ -88,6 +95,7 @@ upload: (url, dados, callbackSuccess, callbackError, login = false) => {
 
             xhr.onreadystatechange = function() {
                 if(this.readyState == 4){
+                    app.method.loading(false);
                     if(this.status == 200 ){
                        return callbackSuccess(JSON.parse(this.responseText));
                     } else {
@@ -104,6 +112,7 @@ upload: (url, dados, callbackSuccess, callbackError, login = false) => {
     }
         
     } catch (error) {
+        app.method.loading(false);
         return callbackError(error);
     }    
 

@@ -124,10 +124,10 @@ empresa.method = {
             sobre: sobre
         };
 
-        app.method.loading(true);
+        
         app.method.post('/empresa/sobre', JSON.stringify(dados),
         (response) => {
-            app.method.loading(false);
+            
             if (response.status == 'error') {
                 app.method.mensagem(response.message);
                 return;       
@@ -140,7 +140,7 @@ empresa.method = {
         },
         (error) => {
             console.log('Error', error);
-            app.method.loading(false);
+            
         });
     },
 
@@ -154,11 +154,11 @@ empresa.method = {
             formData.append('image', document.querySelector('#fileElem').files[0]);
         }
 
-        app.method.loading(true);
+        
 
          app.method.upload('/image/logo/upload', formData,
         (response)=>{
-            app.method.loading(false);
+            
             if (response.status == 'error') {
                 app.method.mensagem(response.message);
                 return;       
@@ -173,7 +173,7 @@ empresa.method = {
         },
         (error)=>{
             console.log(error);
-            app.method.loading(false);
+            
         }
         );
 
@@ -183,11 +183,11 @@ empresa.method = {
             imagem : DADOS_EMPRESA.logotipo
         }
 
-        app.method.loading(true);
+        
 
          app.method.post('/image/logo/remove', JSON.stringify(data),
         (response)=>{
-            app.method.loading(false);
+            
             if (response.status == 'error') {
                 app.method.mensagem(response.message);
                 return;       
@@ -201,7 +201,7 @@ empresa.method = {
         },
         (error)=>{
             console.log(error);
-            app.method.loading(false);
+            
         }
         );
 
@@ -284,10 +284,10 @@ empresa.method = {
                 return;
             }
         }
-        app.method.loading(true);
+        
         app.method.post('/empresa/endereco', JSON.stringify(newEndereco),
         (response) => {
-            app.method.loading(false);
+            
             if (response.status == 'error') {
                 app.method.mensagem(response.message);
                 return;       
@@ -297,13 +297,113 @@ empresa.method = {
         },
         (error) => {
             console.log('Error', error);
-            app.method.loading(false);
+            
         });
     },
 
 
     obterHorarios:()=> {
-        
-    }
+         app.method.get('/empresa/horario',
+        (response) => {
+            
+            
+            if (response.status == 'error') {
+                app.method.mensagem(response.message);
+                return;       
+            }
 
+            empresa.method.carregarHorarios(response.data);
+            
+        },
+        (error) => {
+            console.log('Error', error);
+            
+        });
+    },
+
+    carregarHorarios:(horarios) => {
+        if (horarios.length>0) {
+            horarios.forEach((horario, i) => {
+                let id = Math.floor(Date.now() * Math.random()).toString();
+                let templateHorario = empresa.template.horario.replace(/\${id}/g, id);
+
+                let htmlObject = document.createElement('div');
+                htmlObject.classList.add('container-horario','mt-4');
+                htmlObject.id = `horario-${id}`;
+                htmlObject.innerHTML = templateHorario;
+
+                document.getElementById('listaHorarios').appendChild(htmlObject);
+
+                document.querySelector(`#diainicio-${id}`).value = horario.diainicio;
+                document.querySelector(`#diafim-${id}`).value = horario.diafim;
+                document.querySelector(`#iniciohorarioum-${id}`).value = horario.iniciohorarioum;
+                document.querySelector(`#fimhorarioum-${id}`).value = horario.fimhorarioum;
+                document.querySelector(`#iniciohorariodois-${id}`).value = horario.iniciohorariodois;
+                document.querySelector(`#fimhorariodois-${id}`).value = horario.fimhorariodois;
+
+
+            });
+        }else{
+            empresa.method.adicionarHorario();
+        }
+    },
+
+    adicionarHorario:() => {}
+
+}
+
+empresa.template = {
+    horario: ` <div class="content-horario">
+                                    <div class="form-group">
+                                        <p class="title-categoria mb-0"><b>Até:</b></p>
+                                        <select class="form-control" id="diainicio-\${id}">
+                                            <option value="-1">...</option>
+                                            <option value="0">Domingo</option>
+                                            <option value="1">Segunda-feira</option>
+                                            <option value="2">Terça-feira</option>
+                                            <option value="3">Quarta-feira</option>
+                                            <option value="4">Quinta-feira</option>
+                                            <option value="5">Sexta-feira</option>
+                                            <option value="6">Sábado</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <p class="title-categoria mb-0"><b>Até:</b></p>
+                                        <select class="form-control" id="diafim-\${id}">
+                                            <option value="-1">...</option>
+                                            <option value="0">Domingo</option>
+                                            <option value="1">Segunda-feira</option>
+                                            <option value="2">Terça-feira</option>
+                                            <option value="3">Quarta-feira</option>
+                                            <option value="4">Quinta-feira</option>
+                                            <option value="5">Sexta-feira</option>
+                                            <option value="6">Sábado</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <p class="title-categoria mb-0"><b>Das:</b></p>
+                                        <input type="time" class="form-control" id="iniciohorarioum-\${id}">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <p class="title-categoria mb-0"><b>Até as:</b></p>
+                                        <input type="time" class="form-control" id="fimhorarioum-\${id}">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <p class="title-categoria mb-0"><b>E das:</b></p>
+                                        <input type="time" class="form-control" id="iniciohorariodois-\${id}">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <p class="title-categoria mb-0"><b>Até as:</b></p>
+                                        <input type="time" class="form-control" id="fimhorariodois-\${id}">
+                                    </div>
+
+                                </div>
+                                <a href="#!" class="btn btn-red btn-sm" onclick="empresa.method.removerHorario('\${id}')">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+`
 }
