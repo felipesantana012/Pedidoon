@@ -303,6 +303,8 @@ empresa.method = {
 
 
     obterHorarios:()=> {
+
+        document.getElementById('listaHorarios').innerHTML = '';
          app.method.get('/empresa/horario',
         (response) => {
             
@@ -348,14 +350,95 @@ empresa.method = {
         }
     },
 
-    adicionarHorario:() => {}
+    removerHorario:(id) => {
+        document.getElementById(`horario-${id}`).remove();
+    },
+
+    adicionarHorario:() => {
+        let adicionar = true;
+
+        document.querySelectorAll('#listaHorarios .container-horario').forEach((horario,i) => {
+            let _id = horario.id.split('-')[1];
+            let diaInicio = document.querySelector(`#diainicio-${_id}`).value;
+            let diaFim = document.querySelector(`#diafim-${_id}`).value;
+            let inicioHorarioUm = document.querySelector(`#iniciohorarioum-${_id}`).value;
+            let fimHorarioUm = document.querySelector(`#fimhorarioum-${_id}`).value;
+
+            if (diaInicio <= -1 || diaFim <= -1 || inicioHorarioUm.length <= 0 || fimHorarioUm.length <= 0) {
+                adicionar = false;
+                app.method.mensagem('Preencha os campos do horário existente antes de adicionar um novo.');
+            }
+
+        });
+
+        if (!adicionar) {
+            return;
+        }
+
+          let id = Math.floor(Date.now() * Math.random()).toString();
+                let templateHorario = empresa.template.horario.replace(/\${id}/g, id);
+
+                let htmlObject = document.createElement('div');
+                htmlObject.classList.add('container-horario','mt-4');
+                htmlObject.id = `horario-${id}`;
+                htmlObject.innerHTML = templateHorario;
+
+                document.getElementById('listaHorarios').appendChild(htmlObject);
+    },
+
+    salvarHorario:() => {
+        let horarios = [];
+        let validar = true;
+
+          document.querySelectorAll('#listaHorarios .container-horario').forEach((horario,i) => {
+            let _id = horario.id.split('-')[1];
+            let diaInicio = document.querySelector(`#diainicio-${_id}`).value;
+            let diaFim = document.querySelector(`#diafim-${_id}`).value;
+            let inicioHorarioUm = document.querySelector(`#iniciohorarioum-${_id}`).value;
+            let fimHorarioUm = document.querySelector(`#fimhorarioum-${_id}`).value;
+
+            if (diaInicio <= -1 || diaFim <= -1 || inicioHorarioUm.length <= 0 || fimHorarioUm.length <= 0) {
+                validar = false;
+                app.method.mensagem('Preencha os campos obrigatorios antes de salvar.');
+            }
+
+            horarios.push({
+                diainicio: diaInicio,
+                diafim: diaFim,
+                iniciohorarioum: inicioHorarioUm,
+                fimhorarioum: fimHorarioUm,
+                iniciohorariodois: document.querySelector(`#iniciohorariodois-${_id}`).value,
+                fimhorariodois: document.querySelector(`#fimhorariodois-${_id}`).value
+            });
+
+        });
+
+        if (!validar || horarios.length <=0) {
+            return;
+        }
+
+         app.method.post('/empresa/horario', JSON.stringify(horarios),
+        (response) => {
+            
+            if (response.status == 'error') {
+                app.method.mensagem(response.message);
+                return;       
+            }
+            app.method.mensagem(response.message, 'green');
+            empresa.method.openTab('horario');
+        },
+        (error) => {
+            console.log('Error', error);
+            
+        });
+    }
 
 }
 
 empresa.template = {
     horario: ` <div class="content-horario">
                                     <div class="form-group">
-                                        <p class="title-categoria mb-0"><b>Até:</b></p>
+                                        <p class="title-categoria mb-0"><b>De *:</b></p>
                                         <select class="form-control" id="diainicio-\${id}">
                                             <option value="-1">...</option>
                                             <option value="0">Domingo</option>
@@ -368,7 +451,7 @@ empresa.template = {
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <p class="title-categoria mb-0"><b>Até:</b></p>
+                                        <p class="title-categoria mb-0"><b>Até *:</b></p>
                                         <select class="form-control" id="diafim-\${id}">
                                             <option value="-1">...</option>
                                             <option value="0">Domingo</option>
@@ -382,12 +465,12 @@ empresa.template = {
                                     </div>
 
                                     <div class="form-group">
-                                        <p class="title-categoria mb-0"><b>Das:</b></p>
+                                        <p class="title-categoria mb-0"><b>Das *:</b></p>
                                         <input type="time" class="form-control" id="iniciohorarioum-\${id}">
                                     </div>
 
                                     <div class="form-group">
-                                        <p class="title-categoria mb-0"><b>Até as:</b></p>
+                                        <p class="title-categoria mb-0"><b>Até as *:</b></p>
                                         <input type="time" class="form-control" id="fimhorarioum-\${id}">
                                     </div>
 
