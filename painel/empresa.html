@@ -61,7 +61,7 @@
                                     <p class="nome-empresa"></p>
                                     <span class="email-empresa"></span>
                                 </div>
-                                <a href="#" class="btn btn-white btn-sm" onclick="app.method.logout()">
+                                <a href="#" class="btn btn-white btn-sm" onclick="app.logout()">
                                     <i class="fas fa-sign-out-alt"></i>&nbsp; Sair
                                 </a>
                             </div>
@@ -77,17 +77,17 @@
                         <div class="col-12">
                             <div class="menus-config">
                                 <a href="#" class="btn btn-white btn-sm tab-content active " id="tab-sobre"
-                                    onclick="empresa.method.openTab('sobre')">
+                                    onclick="empresa.openTab('sobre')">
                                     <i class="fas fa-info-circle"></i> Sobre a empresa
                                 </a>
 
                                 <a href="#" class="btn btn-white btn-sm tab-content" id="tab-endereco"
-                                    onclick="empresa.method.openTab('endereco')">
+                                    onclick="empresa.openTab('endereco')">
                                     <i class="fas fa-map-marked-alt"></i> Endereço fisico
                                 </a>
 
                                 <a href="#" class="btn btn-white btn-sm tab-content" id="tab-horario"
-                                    onclick="empresa.method.openTab('horario')">
+                                    onclick="empresa.openTab('horario')">
                                     <i class="fas fa-clock"></i> Horario de funcionamento
                                 </a>
                             </div>
@@ -97,12 +97,12 @@
                             <div class="d-flex">
                                 <div class="logo-empresa">
                                     <div id="img-empresa" class="container-img-sobre">
-                                        <a id="btn-editar-logo" onclick="empresa.method.openModalLogo()" href="#"
+                                        <a id="btn-editar-logo" onclick="empresa.openModalLogo()" href="#"
                                             class="icon-action me-1 mb-1 hidden" data-bs-toggle="tooltip"
                                             data-bs-placement="top" title="Editar">
                                             <i class="fas fa-pencil-alt"></i>
                                         </a>
-                                        <a id="btn-remover-logo" onclick="empresa.method.removerLogo()" href="#"
+                                        <a id="btn-remover-logo" onclick="empresa.removerLogo()" href="#"
                                             class="icon-action me-1 mb-1 hidden" data-bs-toggle="tooltip"
                                             data-bs-placement="top" title="Remover">
                                             <i class="fas fa-trash-alt"></i>
@@ -126,7 +126,7 @@
                                     </div>
 
                                     <a href="#!" class="btn btn-yellow btn-sm mt-5"
-                                        onclick="empresa.method.salvarDadosSobre()">
+                                        onclick="empresa.salvarDadosSobre()">
                                         <i class="fas fa-check"></i>&nbsp; Salvar Alterações
                                     </a>
                                 </div>
@@ -141,7 +141,7 @@
                                     <div class="form-group container-cep">
                                         <p class="title-categoria mb-0"><b>CEP :</b></p>
                                         <input type="text" class="form-control cep" id="txtCEP">
-                                        <a href="#!" class="btn btn-yellow btn-sm" onclick="empresa.method.buscarCep()">
+                                        <a href="#!" class="btn btn-yellow btn-sm" onclick="empresa.buscarCep()">
                                             <i class="fa fa-search"></i>
                                         </a>
                                     </div>
@@ -220,8 +220,7 @@
                                 </div>
                             </div>
 
-                            <a href="#!" class="btn btn-yellow btn-sm mt-4"
-                                onclick="empresa.method.salvarDadosEndereco()">
+                            <a href="#!" class="btn btn-yellow btn-sm mt-4" onclick="empresa.salvarDadosEndereco()">
                                 <i class="fas fa-check"></i>&nbsp; Salvar Alterações
                             </a>
                         </div>
@@ -236,8 +235,7 @@
 
                             <div id="listaHorarios"></div>
 
-
-                            <div class="card card-select mt-5" onclick="empresa.method.adicionarHorario()">
+                            <div class="card card-select mt-5" onclick="empresa.adicionarNovoHorario()">
                                 <div class="infos-produto-opcional">
                                     <p class="mb-0 color-primary">
                                         <i class="fas fa-plus-circle"></i>&nbsp; Adicionar novo horário
@@ -245,7 +243,7 @@
                                 </div>
                             </div>
 
-                            <a href="#!" class="btn btn-yellow btn-sm mt-5" onclick="empresa.method.salvarHorario()">
+                            <a href="#!" class="btn btn-yellow btn-sm mt-5" onclick="empresa.salvarHorario()">
                                 <i class="fas fa-check"></i>&nbsp; Salvar Alterações
                             </a>
                         </div>
@@ -268,7 +266,7 @@
                             <form id="upload-form" class="my-form" enctype="multipart/form-data">
                                 <p><b>Arraste e solte a imagem aqui, ou</b></p>
                                 <input name="upload" type="file" id="fileElemt" accept="image/*"
-                                    onchange="empresa.method.uploadLogo(this.files)">
+                                    onchange="empresa.uploadLogo(this.files)">
                                 <label class="btn btn-sm btn-yellow" for="fileElemt">Carregar imagem</label>
                             </form>
                         </div>

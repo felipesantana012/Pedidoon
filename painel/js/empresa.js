@@ -1,492 +1,371 @@
-document.addEventListener("DOMContentLoaded", function(event) {
-    empresa.event.init();
+document.addEventListener('DOMContentLoaded', () => {
+  EmpresaController.init();
 });
 
-var empresa = {};
-var DADOS_EMPRESA = {};
-var MODAL_UPLOAD = new bootstrap.Modal(document.getElementById('modalUpload'));
+// Referências Globais de Instância
+const MODAL_UPLOAD = new bootstrap.Modal(
+  document.getElementById('modalUpload'),
+);
 
-var DROP_AREA = document.getElementById('drop-area');
+// --- 1. SERVICE: Camada de Comunicação com API ---
+const EmpresaService = {
+  getSobre: (cb) => app.get('/empresa/sobre', cb),
+  postSobre: (dados, cb) =>
+    app.post('/empresa/sobre', JSON.stringify(dados), cb),
 
-empresa.event = {
-    init: () => {
-        app.method.validaToken();
-        app.method.carregarDadosEmpresa();
+  getHorarios: (cb) => app.get('/empresa/horario', cb),
+  postHorarios: (dados, cb) =>
+    app.post('/empresa/horario', JSON.stringify(dados), cb),
 
-       var tooltipList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-         tooltipList.map(function (element) {
-                new bootstrap.Tooltip(element);
-          });
-        
-        empresa.method.openTab('sobre');
-        
-        //Previne os comportamentos padroes do navegador
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            DROP_AREA.addEventListener(eventName, empresa.method.preventDefaults, false);
-            document.body.addEventListener(eventName, empresa.method.preventDefaults, false);
-        });
+  postEndereco: (dados, cb) =>
+    app.post('/empresa/endereco', JSON.stringify(dados), cb),
 
-        //Evento quando passa o mouse em cima com a imagem segurada
-         ['dragenter', 'dragover'].forEach(eventName => {
-            DROP_AREA.addEventListener(eventName, empresa.method.highligtht, false);
-        });
+  uploadLogo: (formData, cb) => app.upload('/image/logo/upload', formData, cb),
+  removeLogo: (dados, cb) =>
+    app.post('/image/logo/remove', JSON.stringify(dados), cb),
 
-        //Evento quando sai com o mouse de cima
-         ['dragleave', 'drop'].forEach(eventName => {
-            DROP_AREA.addEventListener(eventName, empresa.method.unhighligtht, false);
-        });
+  buscarCep: (cep) =>
+    fetch(`https://viacep.com.br/ws/${cep}/json/`).then((r) => r.json()),
+};
 
-        //Evento quando solta a imagem na area
-        DROP_AREA.addEventListener('drop', empresa.method.handleDrop, false);
+// --- 2. VIEW: Camada de Manipulação do DOM ---
+const EmpresaView = {
+  elements: {
+    dropArea: document.getElementById('drop-area'),
+    imgEmpresa: document.getElementById('img-empresa'),
+    listaHorarios: document.getElementById('listaHorarios'),
+    btnEditarLogo: document.getElementById('btn-editar-logo'),
+    btnRemoverLogo: document.getElementById('btn-remover-logo'),
+    inputs: {
+      nome: document.getElementById('txtNomeEmpresa'),
+      sobre: document.getElementById('txtSobreEmpresa'),
+      cep: document.getElementById('txtCEP'),
+      rua: document.getElementById('txtRua'),
+      numero: document.getElementById('txtNumero'),
+      complemento: document.getElementById('txtComplemento'),
+      bairro: document.getElementById('txtBairro'),
+      cidade: document.getElementById('txtCidade'),
+      uf: document.getElementById('ddlUF'),
+    },
+  },
 
-        //inicializa a mascara de cep
-       $('.cep').mask('00000-000');
-        
+  toggleTab: (tabId) => {
+    document
+      .querySelectorAll('.tab-content')
+      .forEach((e) => e.classList.remove('active'));
+    document
+      .querySelectorAll('.tab-item')
+      .forEach((e) => e.classList.add('hidden'));
 
+    const tabLink = document.querySelector('#tab-' + tabId);
+    const tabContent = document.querySelector('#' + tabId);
+
+    if (tabLink) tabLink.classList.add('active');
+    if (tabContent) tabContent.classList.remove('hidden');
+  },
+
+  renderDados: (data) => {
+    const { inputs, imgEmpresa, btnEditarLogo, btnRemoverLogo } =
+      EmpresaView.elements;
+
+    // Logotipo
+    if (data.logotipo) {
+      imgEmpresa.style.backgroundImage = `url('../public/images/empresa/${data.logotipo}')`;
+      imgEmpresa.style.backgroundSize = '70%';
+      btnEditarLogo.classList.add('hidden');
+      btnRemoverLogo.classList.remove('hidden');
+    } else {
+      imgEmpresa.style.backgroundImage = `url('../public/images/default.jpg')`;
+      imgEmpresa.style.backgroundSize = 'cover';
+      btnEditarLogo.classList.remove('hidden');
+      btnRemoverLogo.classList.add('hidden');
     }
-},
 
-empresa.method = {
+    // Preenche inputs
+    inputs.nome.value = data.nome || '';
+    inputs.sobre.value = (data.sobre || '').replace(/\\n/g, '\n');
+    inputs.cep.value = data.cep || '';
+    inputs.rua.value = data.rua || '';
+    inputs.numero.value = data.numero || '';
+    inputs.complemento.value = data.complemento || '';
+    inputs.bairro.value = data.bairro || '';
+    inputs.cidade.value = data.cidade || '';
+    inputs.uf.value = (data.estado || '').toUpperCase();
+  },
 
-    openTab:(tab) => {
-        Array.from(document.querySelectorAll(".tab-content")).forEach(e => e.classList.remove("active"));
-         Array.from(document.querySelectorAll(".tab-item")).forEach(e => e.classList.add("hidden"));
+  renderHorarioItem: (horario = {}) => {
+    const id = Math.floor(Date.now() * Math.random()).toString();
+    const div = document.createElement('div');
+    div.className = 'container-horario mt-4';
+    div.id = `horario-${id}`;
+    div.innerHTML = EmpresaTemplates.horario(id);
+    EmpresaView.elements.listaHorarios.appendChild(div);
 
-        document.querySelector("#tab-" + tab).classList.add("active");
-        document.querySelector("#" + tab).classList.remove("hidden");
+    if (horario.diainicio !== undefined) {
+      document.querySelector(`#diainicio-${id}`).value = horario.diainicio;
+      document.querySelector(`#diafim-${id}`).value = horario.diafim;
+      document.querySelector(`#iniciohorarioum-${id}`).value =
+        horario.iniciohorarioum;
+      document.querySelector(`#fimhorarioum-${id}`).value =
+        horario.fimhorarioum;
+      document.querySelector(`#iniciohorariodois-${id}`).value =
+        horario.iniciohorariodois || '';
+      document.querySelector(`#fimhorariodois-${id}`).value =
+        horario.fimhorariodois || '';
+    }
+  },
+};
 
-        switch (tab) {
-        case 'sobre':
-                empresa.method.obterDados();
-                break;
-        case 'endereco':
-                empresa.method.obterDados();
-                break;
-        case 'horario':
-                empresa.method.obterHorarios();    
-                break;
-            default:
-                break;
-        }
-    },
+// --- 3. CONTROLLER: Regras de Negócio ---
+const EmpresaController = {
+  state: { dados: {} },
 
-    obterDados:() => {
-        app.method.get('/empresa/sobre',
-        (response)=>{
-            if (response.status == 'error') {
-                app.method.mensagem(response.message);
-                return;       
-            }
-            let empresa = response.data[0];
-            DADOS_EMPRESA = empresa;
-            
-            if(empresa.logotipo != null && empresa.logotipo != '') {
-                document.getElementById("img-empresa").style.backgroundImage = `url('../public/images/empresa/${empresa.logotipo}')`;
-                document.getElementById("img-empresa").style.backgroundSize = '70%';
-                document.getElementById("btn-editar-logo").classList.add('hidden');
-                document.getElementById("btn-remover-logo").classList.remove('hidden');
-            }else{
-                document.getElementById("img-empresa").style.backgroundImage = `url('../public/images/default.jpg')`;
-                document.getElementById("img-empresa").style.backgroundSize = 'cover';
-                document.getElementById("btn-editar-logo").classList.remove('hidden');
-                document.getElementById("btn-remover-logo").classList.add('hidden');
-            }
-            document.getElementById("txtNomeEmpresa").value = empresa.nome;
-            document.getElementById("txtSobreEmpresa").innerHTML = empresa.sobre.replace(/\n/g, '\r\n');
+  init: () => {
+    app.validaToken();
+    app.carregarDadosEmpresa();
 
-            document.getElementById("txtCEP").value = empresa.cep;
-            document.getElementById("txtRua").value = empresa.rua;
-            document.getElementById("txtNumero").value = empresa.numero;
-            document.getElementById("txtComplemento").value = empresa.complemento;
-            document.getElementById("txtBairro").value = empresa.bairro;
-            document.getElementById("txtCidade").value = empresa.cidade;
-            document.getElementById("ddlUF").value = empresa.estado.toUpperCase();
+    // Bootstrap Tooltips
+    [].slice
+      .call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+      .map((t) => new bootstrap.Tooltip(t));
 
-        },
-        (error)=>{
-            console.log(error);
-        }
-        );
-    },
+    $('.cep').mask('00000-000');
+    EmpresaController.setupDragAndDrop();
+    EmpresaController.openTab('sobre');
+  },
 
-    salvarDadosSobre:() => {
-        let nome = document.getElementById("txtNomeEmpresa").value.trim();
-        let sobre = document.getElementById("txtSobreEmpresa").value.trim();
+  openTab: (tab) => {
+    EmpresaView.toggleTab(tab);
+    if (tab === 'horario') {
+      EmpresaController.carregarHorarios();
+    } else {
+      EmpresaController.carregarDadosGerais();
+    }
+  },
 
-        if(nome.length <=0 || nome == '') {
-            app.method.mensagem('O nome da empresa é obrigatório.');
-            document.getElementById("txtNomeEmpresa").focus();
-            return;
-        }
+  carregarDadosGerais: () => {
+    EmpresaService.getSobre((response) => {
+      if (response.status === 'error') return app.mensagem(response.message);
+      EmpresaController.state.dados = response.data[0];
+      EmpresaView.renderDados(EmpresaController.state.dados);
+    });
+  },
 
-        let dados = {
-            nome: nome,
-            sobre: sobre
-        };
+  salvarSobre: () => {
+    const nome = EmpresaView.elements.inputs.nome.value.trim();
+    const sobre = EmpresaView.elements.inputs.sobre.value.trim();
 
-        
-        app.method.post('/empresa/sobre', JSON.stringify(dados),
-        (response) => {
-            
-            if (response.status == 'error') {
-                app.method.mensagem(response.message);
-                return;       
-            }
-            app.method.mensagem(response.message, 'green');
-            app.method.gravarValorStorage({ ...app.method.obterValorStorage(), nome: nome
-            });
-            empresa.method.obterDados();
-            app.method.carregarDadosEmpresa();
-        },
-        (error) => {
-            console.log('Error', error);
-            
-        });
-    },
+    if (!nome) return app.mensagem('Nome é obrigatório.');
 
-    uploadLogo:(logoUpload=[]) => {
-        MODAL_UPLOAD.hide();
-        
-        var formData = new FormData();
-        if(logoUpload != undefined){
-            formData.append('image', logoUpload[0]);
-        }else{
-            formData.append('image', document.querySelector('#fileElem').files[0]);
-        }
+    EmpresaService.postSobre({ nome, sobre }, (response) => {
+      if (response.status === 'error') return app.mensagem(response.message);
+      app.mensagem(response.message, 'green');
 
-        
+      let current = app.obterValorStorage();
+      app.gravarValorStorage({ ...current, nome });
 
-         app.method.upload('/image/logo/upload', formData,
-        (response)=>{
-            
-            if (response.status == 'error') {
-                app.method.mensagem(response.message);
-                return;       
-            }
+      EmpresaController.carregarDadosGerais();
+      app.carregarDadosEmpresa();
+    });
+  },
 
-             app.method.mensagem(response.message, 'green');
-              app.method.gravarValorStorage({ ...app.method.obterValorStorage(), logo: response.logotipo
-            });
-            empresa.method.obterDados();
-            app.method.carregarDadosEmpresa();
+  buscarCep: () => {
+    const cep = EmpresaView.elements.inputs.cep.value.replace(/\D/g, '');
+    if (cep.length !== 8) return app.mensagem('CEP inválido.');
 
-        },
-        (error)=>{
-            console.log(error);
-            
-        }
-        );
+    app.loading(true);
+    EmpresaService.buscarCep(cep)
+      .then((data) => {
+        app.loading(false);
+        if (data.erro) return app.mensagem('CEP não encontrado.');
 
-    },
-    removerLogo:() => {
-        var data = {
-            imagem : DADOS_EMPRESA.logotipo
-        }
+        const { inputs } = EmpresaView.elements;
+        inputs.rua.value = data.logradouro;
+        inputs.bairro.value = data.bairro;
+        inputs.cidade.value = data.localidade;
+        inputs.uf.value = data.uf;
+        inputs.numero.focus();
+      })
+      .catch(() => {
+        app.loading(false);
+        app.mensagem('Erro na busca.');
+      });
+  },
 
-        
+  salvarEndereco: () => {
+    const { inputs } = EmpresaView.elements;
+    const dados = {
+      cep: inputs.cep.value.trim(),
+      rua: inputs.rua.value.trim(),
+      numero: inputs.numero.value.trim(),
+      complemento: inputs.complemento.value.trim(),
+      bairro: inputs.bairro.value.trim(),
+      cidade: inputs.cidade.value.trim(),
+      estado: inputs.uf.value.trim(),
+    };
 
-         app.method.post('/image/logo/remove', JSON.stringify(data),
-        (response)=>{
-            
-            if (response.status == 'error') {
-                app.method.mensagem(response.message);
-                return;       
-            }
+    if (!dados.cep || !dados.rua || dados.estado === '-1')
+      return app.mensagem('Preencha os campos obrigatórios.');
 
-            app.method.mensagem(response.message, 'green');
-            app.method.removerSessao('logo');
-            empresa.method.obterDados();
-            app.method.carregarDadosEmpresa();
+    EmpresaService.postEndereco(dados, (response) => {
+      if (response.status === 'error') return app.mensagem(response.message);
+      app.mensagem(response.message, 'green');
+      app.carregarDadosEmpresa();
+    });
+  },
 
-        },
-        (error)=>{
-            console.log(error);
-            
-        }
-        );
+  validarHorariosAtuais: () => {
+    const containers = document.querySelectorAll('.container-horario');
+    let todosPreenchidos = true;
+    containers.forEach((el) => {
+      const id = el.id.split('-')[1];
+      const diaInicio = document.querySelector(`#diainicio-${id}`).value;
+      const diaFim = document.querySelector(`#diafim-${id}`).value;
+      const horaInicio = document.querySelector(`#iniciohorarioum-${id}`).value;
+      const horaFim = document.querySelector(`#fimhorarioum-${id}`).value;
 
-    },
+      if (diaInicio == -1 || diaFim == -1 || !horaInicio || !horaFim) {
+        todosPreenchidos = false;
+      }
+    });
 
-    openModalLogo:() => {
-        MODAL_UPLOAD.show();
-    },
+    return todosPreenchidos;
+  },
 
-    preventDefaults:(e) => {
+  adicionarNovoHorario: () => {
+    if (EmpresaController.validarHorariosAtuais()) {
+      EmpresaView.renderHorarioItem();
+    } else {
+      app.mensagem(
+        'Preencha os campos do horário anterior antes de adicionar um novo.',
+      );
+    }
+  },
+
+  carregarHorarios: () => {
+    EmpresaView.elements.listaHorarios.innerHTML = '';
+    EmpresaService.getHorarios((res) => {
+      if (res.data && res.data.length > 0)
+        res.data.forEach((h) => EmpresaView.renderHorarioItem(h));
+      else EmpresaView.renderHorarioItem();
+    });
+  },
+
+  salvarHorario: () => {
+    const horarios = [];
+    let valido = true;
+    document.querySelectorAll('.container-horario').forEach((el) => {
+      const id = el.id.split('-')[1];
+      const item = {
+        diainicio: document.querySelector(`#diainicio-${id}`).value,
+        diafim: document.querySelector(`#diafim-${id}`).value,
+        iniciohorarioum: document.querySelector(`#iniciohorarioum-${id}`).value,
+        fimhorarioum: document.querySelector(`#fimhorarioum-${id}`).value,
+        iniciohorariodois: document.querySelector(`#iniciohorariodois-${id}`)
+          .value,
+        fimhorariodois: document.querySelector(`#fimhorariodois-${id}`).value,
+      };
+      if (item.diainicio === '-1' || !item.iniciohorarioum) valido = false;
+      horarios.push(item);
+    });
+
+    if (!valido) return app.mensagem('Preencha os horários obrigatórios.');
+
+    EmpresaService.postHorarios(horarios, (res) => {
+      if (res.status === 'error') return app.mensagem(res.message);
+      app.mensagem(res.message, 'green');
+      EmpresaController.openTab('horario');
+    });
+  },
+
+  setupDragAndDrop: () => {
+    const area = EmpresaView.elements.dropArea;
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach((n) => {
+      area.addEventListener(n, (e) => {
         e.preventDefault();
         e.stopPropagation();
-    },
+      });
+    });
+    area.addEventListener('drop', (e) =>
+      EmpresaController.uploadLogo(e.dataTransfer.files),
+    );
+  },
 
-    highligtht:(e) => {
-        if (!DROP_AREA.classList.contains('highlight')) {
-            DROP_AREA.classList.add('highlight');
-        }
-    },
-    unhighligtht:(e) => {
-        DROP_AREA.classList.remove('highlight');
-    },
-    handleDrop:(e) => {
-        let dt = e.dataTransfer;
-        let files = dt.files;
+  uploadLogo: (files) => {
+    MODAL_UPLOAD.hide();
+    const formData = new FormData();
+    const file = files
+      ? files[0]
+      : document.querySelector('#fileElem').files[0];
+    formData.append('image', file);
 
-        empresa.method.uploadLogo(files);
-    },
+    EmpresaService.uploadLogo(formData, (res) => {
+      if (res.status === 'error') return app.mensagem(res.message);
+      app.mensagem(res.message, 'green');
+      let current = app.obterValorStorage();
+      app.gravarValorStorage({ ...current, logo: res.logotipo });
+      EmpresaController.carregarDadosGerais();
+      app.carregarDadosEmpresa();
+    });
+  },
 
+  removerLogo: () => {
+    const data = { imagem: EmpresaController.state.dados.logotipo };
+    EmpresaService.removeLogo(data, (res) => {
+      if (res.status === 'error') return app.mensagem(res.message);
+      app.mensagem(res.message, 'green');
+      app.removerSessao('logo');
+      EmpresaController.carregarDadosGerais();
+      app.carregarDadosEmpresa();
+    });
+  },
+};
 
-    buscarCep:()=>{
-        let cep = document.getElementById("txtCEP").value.replace(/\D/g, '');
-        if (cep.length != 8) {
-            app.method.mensagem('CEP inválido. O CEP deve conter 8 dígitos.');
-            document.getElementById("txtCEP").focus();
-            return;
-        }
+// --- 4. TEMPLATES ---
+const EmpresaTemplates = {
+  horario: (id) => `
+        <div class="content-horario">
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    <p class="mb-0"><b>De *:</b></p>
+                    <select class="form-control" id="diainicio-${id}">
+                        <option value="-1">...</option>
+                        <option value="0">Domingo</option><option value="1">Segunda</option><option value="2">Terça</option>
+                        <option value="3">Quarta</option><option value="4">Quinta</option><option value="5">Sexta</option><option value="6">Sábado</option>
+                    </select>
+                </div>
+                <div class="col-md-6 form-group">
+                    <p class="mb-0"><b>Até *:</b></p>
+                    <select class="form-control" id="diafim-${id}">
+                        <option value="-1">...</option>
+                        <option value="0">Domingo</option><option value="1">Segunda</option><option value="2">Terça</option>
+                        <option value="3">Quarta</option><option value="4">Quinta</option><option value="5">Sexta</option><option value="6">Sábado</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-md-3"><p class="mb-0"><b>Das *:</b></p><input type="time" class="form-control" id="iniciohorarioum-${id}"></div>
+                <div class="col-md-3"><p class="mb-0"><b>Até *:</b></p><input type="time" class="form-control" id="fimhorarioum-${id}"></div>
+                <div class="col-md-3"><p class="mb-0"><b>E das:</b></p><input type="time" class="form-control" id="iniciohorariodois-${id}"></div>
+                <div class="col-md-3"><p class="mb-0"><b>Até:</b></p><input type="time" class="form-control" id="fimhorariodois-${id}"></div>
+            </div>
+            <div class="text-end mt-2">
+                <button class="btn btn-red btn-sm" onclick="empresa.removerHorario('${id}')"><i class="fas fa-trash"></i></button>
+            </div>
+            <hr>
+        </div>`,
+};
 
-        app.method.loading(true);
-        fetch(`https://viacep.com.br/ws/${cep}/json/`)
-        .then(response => response.json())
-        .then(data => {
-            app.method.loading(false);
-            if (data.erro) {
-                app.method.mensagem('CEP não encontrado.');
-                return;
-            }
-            document.getElementById("txtRua").value = data.logradouro;
-            document.getElementById("txtBairro").value = data.bairro;
-            document.getElementById("txtCidade").value = data.localidade;
-            document.getElementById("ddlUF").value = data.uf;
-            document.getElementById("txtNumero").focus();
-            document.getElementById("txtNumero").value = "";
-            
-        })
-        .catch(error => {
-            console.error('Erro ao buscar CEP:', error);
-            app.method.loading(false);
-            app.method.mensagem('Erro ao buscar CEP. Tente novamente mais tarde.');
-        });
-    },
-
-    salvarDadosEndereco:() => {
-
-        let newEndereco = {
-            cep: document.getElementById("txtCEP").value.trim(),
-            rua: document.getElementById("txtRua").value.trim(),
-            numero: document.getElementById("txtNumero").value.trim(),
-            complemento: document.getElementById("txtComplemento").value.trim(),
-            bairro: document.getElementById("txtBairro").value.trim(),
-            cidade: document.getElementById("txtCidade").value.trim(),
-            estado: document.getElementById("ddlUF").value.toUpperCase().trim()
-        };
-        
-
-        for (const key in newEndereco) {
-            if (newEndereco[key].length <=0 || newEndereco[key] == '' || newEndereco[key] == -1) {
-                app.method.mensagem(`O campo ${key.charAt(0).toUpperCase() + key.slice(1)} é obrigatório.`);
-                document.getElementById("txt" + key.charAt(0).toUpperCase() + key.slice(1)).focus();
-                return;
-            }
-        }
-        
-        app.method.post('/empresa/endereco', JSON.stringify(newEndereco),
-        (response) => {
-            
-            if (response.status == 'error') {
-                app.method.mensagem(response.message);
-                return;       
-            }
-            app.method.mensagem(response.message, 'green');
-            app.method.carregarDadosEmpresa();
-        },
-        (error) => {
-            console.log('Error', error);
-            
-        });
-    },
-
-
-    obterHorarios:()=> {
-
-        document.getElementById('listaHorarios').innerHTML = '';
-         app.method.get('/empresa/horario',
-        (response) => {
-            
-            
-            if (response.status == 'error') {
-                app.method.mensagem(response.message);
-                return;       
-            }
-
-            empresa.method.carregarHorarios(response.data);
-            
-        },
-        (error) => {
-            console.log('Error', error);
-            
-        });
-    },
-
-    carregarHorarios:(horarios) => {
-        if (horarios.length>0) {
-            horarios.forEach((horario, i) => {
-                let id = Math.floor(Date.now() * Math.random()).toString();
-                let templateHorario = empresa.template.horario.replace(/\${id}/g, id);
-
-                let htmlObject = document.createElement('div');
-                htmlObject.classList.add('container-horario','mt-4');
-                htmlObject.id = `horario-${id}`;
-                htmlObject.innerHTML = templateHorario;
-
-                document.getElementById('listaHorarios').appendChild(htmlObject);
-
-                document.querySelector(`#diainicio-${id}`).value = horario.diainicio;
-                document.querySelector(`#diafim-${id}`).value = horario.diafim;
-                document.querySelector(`#iniciohorarioum-${id}`).value = horario.iniciohorarioum;
-                document.querySelector(`#fimhorarioum-${id}`).value = horario.fimhorarioum;
-                document.querySelector(`#iniciohorariodois-${id}`).value = horario.iniciohorariodois;
-                document.querySelector(`#fimhorariodois-${id}`).value = horario.fimhorariodois;
-
-
-            });
-        }else{
-            empresa.method.adicionarHorario();
-        }
-    },
-
-    removerHorario:(id) => {
-        document.getElementById(`horario-${id}`).remove();
-    },
-
-    adicionarHorario:() => {
-        let adicionar = true;
-
-        document.querySelectorAll('#listaHorarios .container-horario').forEach((horario,i) => {
-            let _id = horario.id.split('-')[1];
-            let diaInicio = document.querySelector(`#diainicio-${_id}`).value;
-            let diaFim = document.querySelector(`#diafim-${_id}`).value;
-            let inicioHorarioUm = document.querySelector(`#iniciohorarioum-${_id}`).value;
-            let fimHorarioUm = document.querySelector(`#fimhorarioum-${_id}`).value;
-
-            if (diaInicio <= -1 || diaFim <= -1 || inicioHorarioUm.length <= 0 || fimHorarioUm.length <= 0) {
-                adicionar = false;
-                app.method.mensagem('Preencha os campos do horário existente antes de adicionar um novo.');
-            }
-
-        });
-
-        if (!adicionar) {
-            return;
-        }
-
-          let id = Math.floor(Date.now() * Math.random()).toString();
-                let templateHorario = empresa.template.horario.replace(/\${id}/g, id);
-
-                let htmlObject = document.createElement('div');
-                htmlObject.classList.add('container-horario','mt-4');
-                htmlObject.id = `horario-${id}`;
-                htmlObject.innerHTML = templateHorario;
-
-                document.getElementById('listaHorarios').appendChild(htmlObject);
-    },
-
-    salvarHorario:() => {
-        let horarios = [];
-        let validar = true;
-
-          document.querySelectorAll('#listaHorarios .container-horario').forEach((horario,i) => {
-            let _id = horario.id.split('-')[1];
-            let diaInicio = document.querySelector(`#diainicio-${_id}`).value;
-            let diaFim = document.querySelector(`#diafim-${_id}`).value;
-            let inicioHorarioUm = document.querySelector(`#iniciohorarioum-${_id}`).value;
-            let fimHorarioUm = document.querySelector(`#fimhorarioum-${_id}`).value;
-
-            if (diaInicio <= -1 || diaFim <= -1 || inicioHorarioUm.length <= 0 || fimHorarioUm.length <= 0) {
-                validar = false;
-                app.method.mensagem('Preencha os campos obrigatorios antes de salvar.');
-            }
-
-            horarios.push({
-                diainicio: diaInicio,
-                diafim: diaFim,
-                iniciohorarioum: inicioHorarioUm,
-                fimhorarioum: fimHorarioUm,
-                iniciohorariodois: document.querySelector(`#iniciohorariodois-${_id}`).value,
-                fimhorariodois: document.querySelector(`#fimhorariodois-${_id}`).value
-            });
-
-        });
-
-        if (!validar || horarios.length <=0) {
-            return;
-        }
-
-         app.method.post('/empresa/horario', JSON.stringify(horarios),
-        (response) => {
-            
-            if (response.status == 'error') {
-                app.method.mensagem(response.message);
-                return;       
-            }
-            app.method.mensagem(response.message, 'green');
-            empresa.method.openTab('horario');
-        },
-        (error) => {
-            console.log('Error', error);
-            
-        });
-    }
-
-}
-
-empresa.template = {
-    horario: ` <div class="content-horario">
-                                    <div class="form-group">
-                                        <p class="title-categoria mb-0"><b>De *:</b></p>
-                                        <select class="form-control" id="diainicio-\${id}">
-                                            <option value="-1">...</option>
-                                            <option value="0">Domingo</option>
-                                            <option value="1">Segunda-feira</option>
-                                            <option value="2">Terça-feira</option>
-                                            <option value="3">Quarta-feira</option>
-                                            <option value="4">Quinta-feira</option>
-                                            <option value="5">Sexta-feira</option>
-                                            <option value="6">Sábado</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <p class="title-categoria mb-0"><b>Até *:</b></p>
-                                        <select class="form-control" id="diafim-\${id}">
-                                            <option value="-1">...</option>
-                                            <option value="0">Domingo</option>
-                                            <option value="1">Segunda-feira</option>
-                                            <option value="2">Terça-feira</option>
-                                            <option value="3">Quarta-feira</option>
-                                            <option value="4">Quinta-feira</option>
-                                            <option value="5">Sexta-feira</option>
-                                            <option value="6">Sábado</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <p class="title-categoria mb-0"><b>Das *:</b></p>
-                                        <input type="time" class="form-control" id="iniciohorarioum-\${id}">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <p class="title-categoria mb-0"><b>Até as *:</b></p>
-                                        <input type="time" class="form-control" id="fimhorarioum-\${id}">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <p class="title-categoria mb-0"><b>E das:</b></p>
-                                        <input type="time" class="form-control" id="iniciohorariodois-\${id}">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <p class="title-categoria mb-0"><b>Até as:</b></p>
-                                        <input type="time" class="form-control" id="fimhorariodois-\${id}">
-                                    </div>
-
-                                </div>
-                                <a href="#!" class="btn btn-red btn-sm" onclick="empresa.method.removerHorario('\${id}')">
-                                    <i class="fas fa-trash-alt"></i>
-                                </a>
-`
-}
+// Interface Global para Onclick do HTML
+window.empresa = {
+  openTab: EmpresaController.openTab,
+  salvarDadosSobre: EmpresaController.salvarSobre,
+  salvarDadosEndereco: EmpresaController.salvarEndereco,
+  salvarHorario: EmpresaController.salvarHorario,
+  adicionarNovoHorario: () => EmpresaController.adicionarNovoHorario(),
+  removerHorario: (id) => document.getElementById(`horario-${id}`).remove(),
+  openModalLogo: () => MODAL_UPLOAD.show(),
+  uploadLogo: EmpresaController.uploadLogo,
+  removerLogo: EmpresaController.removerLogo,
+  buscarCep: EmpresaController.buscarCep,
+};
