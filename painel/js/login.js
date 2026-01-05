@@ -8,6 +8,12 @@ const loginController = {
       e.preventDefault();
       loginController.validarLogin();
     });
+
+    const msg = localStorage.getItem('msg_pendente');
+    if (msg) {
+      app.mensagem(msg);
+      localStorage.removeItem('msg_pendente');
+    }
   },
 
   validarLogin: () => {

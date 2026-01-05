@@ -106,6 +106,10 @@ var app = {
     const sessao = app.obterValorStorage();
 
     if ((!sessao || !sessao.token) && !login) {
+      localStorage.setItem(
+        'msg_pendente',
+        'Sessão expirada. Faça login novamente.',
+      );
       window.location.href = '/painel/login.html';
       return false;
     }
