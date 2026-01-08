@@ -157,13 +157,291 @@
         </div>
       </div>
     </div>
-  </body>
 
-  <script type="text/javascript" src="../js/jquery.min.js"></script>
-  <script type="text/javascript" src="../js/jquery-ui.js"></script>
-  <script type="text/javascript" src="../js/bootstrap.bundle.min.js"></script>
-  <script type="text/javascript" src="../js/jquery.mask.js"></script>
-  <script type="text/javascript" src="../js/app.js"></script>
-  <script type="text/javascript" src="../js/icones-categoria.js"></script>
-  <script type="text/javascript" src="./js/cardapio.js"></script>
+    <div
+      id="modalProduto"
+      class="modal fade modal-form modal-form"
+      tabindex="-1"
+      role="dialog"
+      data-backdrop="static"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title"><b>Produto</b></h5>
+            <button
+              type="button"
+              class="btn btn-white btn-sm"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            >
+              <i class="fas fa-times"></i> Fechar
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="row mb-5">
+              <div class="col-12">
+                <div class="form-group">
+                  <p class="title-categoria mb-0 mt-4">
+                    <b>Nome do produto:</b>
+                  </p>
+                  <input type="text" id="txtNomeProduto" class="form-control" />
+                </div>
+              </div>
+
+              <div class="col-12">
+                <div class="form-group">
+                  <p class="title-categoria mb-0 mt-4">
+                    <b>Preço (R$):</b>
+                  </p>
+                  <input
+                    type="text"
+                    id="txtValorProduto"
+                    class="form-control money"
+                  />
+                </div>
+              </div>
+
+              <div class="col-12">
+                <div class="form-group">
+                  <p class="title-categoria mb-0 mt-4">
+                    <b>Descrição:</b>
+                  </p>
+                  <textarea
+                    id="txtDscricaoProduto"
+                    class="form-control"
+                    style="height: 190px"
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+
+            <div class="footer-btn">
+              <a
+                href="#!"
+                class="btn btn-yellow btn-sm"
+                onclick="cardapio.salvarProduto()"
+              >
+                <i class="fas fa-check"></i>&nbsp; Salvar Produto
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="modalUpload"
+      class="modal fade modal-cadastro"
+      tabindex="-1"
+      role="dialog"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-body">
+            <div class="row upload">
+              <div id="drop-area">
+                <form
+                  id="upload-form"
+                  class="my-form"
+                  enctype="multipart/form-data"
+                >
+                  <p><b>Arraste e solte a imagem aqui, ou</b></p>
+                  <input
+                    name="upload"
+                    type="file"
+                    id="fileElemt"
+                    accept="image/*"
+                    onchange="cardapio.uploadImagemProduto(this.files)"
+                  />
+                  <label class="btn btn-sm btn-yellow" for="fileElemt"
+                    >Carregar imagem</label
+                  >
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="abrirModalRemoverImagemProduto"
+      class="modal fade modal-form"
+      tabindex="-1"
+      role="dialog"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">
+              <i class="fas fa-trash-alt"></i>&nbsp;
+              <b>Remover Imagem do Produto</b>
+            </h5>
+          </div>
+          <div class="modal-body">
+            <div class="row mb-5">
+              <div class="col-12">
+                <p>
+                  Tem certeza que deseja <b>remover</b> a imagem deste produto?
+                </p>
+              </div>
+            </div>
+            <div class="footer-btn">
+              <a
+                href="#!"
+                class="btn btn-remove btn-sm"
+                onclick="cardapio.removeImagemProduto()"
+              >
+                <i class="fas fa-trash-alt"></i>&nbsp; Remover Imagem</a
+              >
+              <button
+                type="button"
+                data-bs-dismiss="modal"
+                aria-label="closed"
+                class="btn btn-yellow btn-sm"
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="modalRemoverProduto"
+      class="modal fade modal-form"
+      tabindex="-1"
+      role="dialog"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">
+              <i class="fas fa-trash-alt"></i>&nbsp;
+              <b>Remover Produto</b>
+            </h5>
+          </div>
+          <div class="modal-body">
+            <div class="row mb-5">
+              <div class="col-12">
+                <p>Tem certeza que deseja <b>remover</b> este produto?</p>
+              </div>
+            </div>
+            <div class="footer-btn">
+              <a
+                href="#!"
+                class="btn btn-remove btn-sm"
+                onclick="cardapio.removerProduto()"
+              >
+                <i class="fas fa-trash-alt"></i>&nbsp; Remover Produto</a
+              >
+              <button
+                type="button"
+                data-bs-dismiss="modal"
+                aria-label="closed"
+                class="btn btn-yellow btn-sm"
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="modalDuplicarProduto"
+      class="modal fade modal-form"
+      tabindex="-1"
+      role="dialog"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">
+              <i class="far fa-copy"></i>&nbsp;
+              <b>Duplicar Produto</b>
+            </h5>
+          </div>
+          <div class="modal-body">
+            <div class="row mb-5">
+              <div class="col-12">
+                <p>Tem certeza que deseja <b>Duplicar</b> este produto?</p>
+              </div>
+            </div>
+            <div class="footer-btn">
+              <a
+                href="#!"
+                class="btn btn-white btn-sm mx-2"
+                onclick="cardapio.duplicarProduto()"
+              >
+                <i class="far fa-copy"></i>&nbsp; Duplicar Produto</a
+              >
+              <button
+                type="button"
+                data-bs-dismiss="modal"
+                aria-label="closed"
+                class="btn btn-yellow btn-sm"
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="modalRemoverCategoria"
+      class="modal fade modal-form"
+      tabindex="-1"
+      role="dialog"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">
+              <i class="fas fa-trash-alt"></i>&nbsp;
+              <b>Remover Categoria</b>
+            </h5>
+          </div>
+          <div class="modal-body">
+            <div class="row mb-5">
+              <div class="col-12">
+                <p>Tem certeza que deseja <b>remover</b> está Categoria?</p>
+                <b class="color-red">ATENÇÃO: </b> Todos os produtos desta
+                categoria serão removidos.
+              </div>
+            </div>
+            <div class="footer-btn">
+              <a
+                href="#!"
+                class="btn btn-remove btn-sm"
+                onclick="cardapio.removerCategoria()"
+              >
+                <i class="fas fa-trash-alt"></i>&nbsp; Remover Categoria</a
+              >
+              <button
+                type="button"
+                data-bs-dismiss="modal"
+                aria-label="closed"
+                class="btn btn-yellow btn-sm"
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/jquery-ui.js"></script>
+    <script type="text/javascript" src="../js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="../js/jquery.mask.js"></script>
+    <script type="text/javascript" src="../js/app.js"></script>
+    <script type="text/javascript" src="../js/icones-categoria.js"></script>
+    <script type="text/javascript" src="./js/cardapio.js"></script>
+  </body>
 </html>

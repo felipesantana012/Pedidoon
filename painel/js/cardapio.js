@@ -2,7 +2,13 @@ $(document).ready(function () {
   CardapioController.init();
 });
 
+// Referências Globais de Instância
+const MODAL_UPLOAD = new bootstrap.Modal(
+  document.getElementById('modalUpload'),
+);
+
 var CATEGORIA_ID = 0;
+var PRODUTO_ID = 0;
 
 // --- 1. HELPERS: Formatação e Lógica de Apoio ---
 const CardapioHelpers = {
@@ -13,8 +19,19 @@ const CardapioHelpers = {
   },
 
   obterEstiloImagem: (imagem) => {
-    const path = imagem && imagem.trim() !== '' ? imagem : 'default.jpg';
-    return `style="background-image: url('/public/images/${path}'); background-size: cover; background-position: center;"`;
+    const pastaCardapio = '/public/images/cardapio/';
+    const pastaDefault = '/public/images/';
+    const imagemValida =
+      imagem !== null &&
+      imagem !== undefined &&
+      String(imagem).trim() !== '' &&
+      String(imagem) !== 'null';
+
+    const fotoFinal = imagemValida
+      ? `${pastaCardapio}${imagem}`
+      : `${pastaDefault}default.jpg`;
+
+    return `style="background-image: url('${fotoFinal}'); background-size: cover; background-position: center;"`;
   },
 };
 
@@ -23,14 +40,31 @@ const CardapioService = {
   getCategorias: (cb) => app.get('/categoria', cb),
   postCategoria: (dados, cb) =>
     app.post('/categoria', JSON.stringify(dados), cb),
-  postOrdenar: (dados, cb) =>
+  postOrdenarCategoria: (dados, cb) =>
     app.post('/categoria/ordenar', JSON.stringify(dados), cb),
+  postOrdenarProdutos: (dados, cb) =>
+    app.post('/produto/ordenar', JSON.stringify(dados), cb),
   getProdutos: (idcategoria, cb) =>
     app.get('/produto/categoria/' + idcategoria, cb),
+  postProduto: (dados, cb) => app.post('/produto', JSON.stringify(dados), cb),
+  postUploadImagemProduto: (formData, cb) =>
+    app.upload('/image/produto/upload/' + PRODUTO_ID, formData, cb),
+  postRemoveImagemProduto: (dados, cb) =>
+    app.post('/image/produto/remove', JSON.stringify(dados), cb),
+  postRemoverProduto: (dados, cb) =>
+    app.post('/produto/remove', JSON.stringify(dados), cb),
+  postDuplicarProduto: (dados, cb) =>
+    app.post('/produto/duplicar', JSON.stringify(dados), cb),
+  postRemoverCategoria: (dados, cb) =>
+    app.post('/categoria/remove', JSON.stringify(dados), cb),
 };
 
 // --- 3. VIEW: Camada de Manipulação do DOM ---
 const CardapioView = {
+  elements: {
+    dropArea: document.getElementById('drop-area'),
+  },
+
   renderCategorias: (lista) => {
     const $menu = $('#categoriasMenu');
     $menu.html('');
@@ -64,7 +98,8 @@ const CardapioView = {
 
     const html = lista
       .map((e) => {
-        const temImagem = e.imagem && e.imagem.trim() !== '';
+        const temImagem =
+          e.imagem && e.imagem !== 'null' && e.imagem.trim() !== '';
         return CardapioTemplates.produtos()
           .replace(/\${id}/g, e.idproduto)
           .replace(/\${imagem}/g, CardapioHelpers.obterEstiloImagem(e.imagem))
@@ -79,6 +114,11 @@ const CardapioView = {
 
     $container.append(html);
     $container.find('[data-toggle="tooltip"]').tooltip();
+    $('#listaProdutos-' + idcategoria).sortable({
+      scroll: false,
+      update: () => CardapioController.atualizarOrdemProduto(idcategoria),
+      handle: '.drag-icon-produto',
+    });
   },
 };
 
@@ -96,8 +136,11 @@ const CardapioController = {
       handle: '.drag-icon',
     });
 
+    $('.money').mask('#.##0,00', { reverse: true });
+
     CardapioController.obterCategorias();
     CardapioController.carregarListaIcones();
+    CardapioController.setupDragAndDrop();
   },
 
   obterCategorias: () => {
@@ -108,10 +151,19 @@ const CardapioController = {
     });
   },
 
-  obterProdutosCategoria: (idcategoria) => {
+  // obterCategoriasAtivas: () => {
+  //   CardapioService.getCategorias((response) => {
+  //     if (response.status === 'error') return app.mensagem(response.message);
+  //     const categoriasAtivas = response.data.filter((cat) => cat.ativa === 1);
+  //     CardapioController.state.dados = categoriasAtivas;
+  //     CardapioView.renderCategorias(categoriasAtivas);
+  //   });
+  // },
+
+  obterProdutosCategoria: (idcategoria, forcar = false) => {
     const container = $(`#listaProdutos-${idcategoria}`);
 
-    if (container.children().length > 0) return;
+    if (container.children().length > 0 && !forcar) return;
 
     CardapioService.getProdutos(idcategoria, (response) => {
       if (response.status === 'error') {
@@ -151,7 +203,7 @@ const CardapioController = {
         });
       });
 
-    CardapioService.postOrdenar(categorias, (response) => {
+    CardapioService.postOrdenarCategoria(categorias, (response) => {
       if (response.status === 'error') return app.mensagem(response.message);
       app.mensagem(response.message, 'green');
     });
@@ -181,7 +233,194 @@ const CardapioController = {
     CATEGORIA_ID = 0;
     $('#ddlIconeCategoria').val('-1');
     $('#txtNomeCategoria').val('');
+    $('#modalCategoria').modal({ backdrop: 'static' });
     $('#modalCategoria').modal('show');
+  },
+
+  // ------ Produto ------
+
+  atualizarOrdemProduto: (idcategoria) => {
+    let produtos = [];
+    $(`#listaProdutos-${idcategoria}`)
+      .children()
+      .each((i, e) => {
+        produtos.push({
+          idproduto: $(e).attr('data-idproduto'),
+          ordem: i + 1,
+        });
+      });
+
+    if (produtos.length === 0) return;
+
+    CardapioService.postOrdenarProdutos(produtos, (response) => {
+      if (response.status === 'error') return app.mensagem(response.message);
+      app.mensagem(response.message, 'green');
+    });
+  },
+
+  abrirModalAdicionarProduto: (idcategoria) => {
+    CATEGORIA_ID = idcategoria;
+    PRODUTO_ID = 0;
+
+    $('#txtNomeProduto').val('');
+    $('#txtValorProduto').val('');
+    $('#txtDscricaoProduto').val('');
+
+    $('#modalProduto').modal({ backdrop: 'static' });
+    $('#modalProduto').modal('show');
+  },
+
+  editarProduto: (idcategoria, idproduto) => {
+    CATEGORIA_ID = idcategoria;
+    PRODUTO_ID = idproduto;
+
+    const card = $(`.card[data-idproduto="${idproduto}"]`);
+    const nome = card.find('.name b').text();
+    const descricao = card.find('.description').text().trim();
+    const valorBruto = card.find('.price b').text().replace('R$ ', '').trim();
+    const valor = CardapioHelpers.formatarMoeda(valorBruto);
+
+    $('#txtNomeProduto').val(nome);
+    $('#txtValorProduto').val(valor);
+    $('#txtDscricaoProduto').val(
+      descricao === 'Sem descrição' ? '' : descricao,
+    );
+
+    $('#modalProduto').modal({ backdrop: 'static' });
+    $('#modalProduto').modal('show');
+  },
+
+  salvarProduto: () => {
+    const nome = $('#txtNomeProduto').val().trim();
+    const descricao = $('#txtDscricaoProduto').val().trim();
+
+    let valorInput = $('#txtValorProduto').val();
+    let valorParaBanco = parseFloat(
+      valorInput.replace(/\./g, '').replace(',', '.'),
+    );
+
+    if (!nome) return app.mensagem('Informe o nome do produto.');
+    if (isNaN(valorParaBanco) || valorParaBanco <= 0)
+      return app.mensagem('Informe um valor válido.');
+
+    const dados = {
+      idcategoria: CATEGORIA_ID,
+      idproduto: PRODUTO_ID,
+      nome: nome,
+      valor: valorParaBanco, // Enviamos o número puro para a API
+      descricao: descricao,
+    };
+
+    CardapioService.postProduto(dados, (response) => {
+      $('#modalProduto').modal('hide');
+      if (response.status === 'error') return app.mensagem(response.message);
+
+      app.mensagem(response.message, 'green');
+      CardapioController.obterProdutosCategoria(CATEGORIA_ID, true);
+    });
+  },
+
+  setupDragAndDrop: () => {
+    const area = CardapioView.elements.dropArea;
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach((n) => {
+      area.addEventListener(n, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+      });
+    });
+    area.addEventListener('drop', (e) =>
+      CardapioController.uploadImagemProduto(e.dataTransfer.files),
+    );
+  },
+
+  abrirModalEditarImagemProduto: (idcategoria, idproduto) => {
+    CATEGORIA_ID = idcategoria;
+    PRODUTO_ID = idproduto;
+    $('#fileElem').val('');
+    MODAL_UPLOAD.show();
+  },
+
+  abrirModalRemoverImagemProduto: (idcategoria, idproduto) => {
+    CATEGORIA_ID = idcategoria;
+    PRODUTO_ID = idproduto;
+
+    $('#abrirModalRemoverImagemProduto').modal({ backdrop: 'static' });
+    $('#abrirModalRemoverImagemProduto').modal('show');
+  },
+
+  uploadImagemProduto: (files) => {
+    MODAL_UPLOAD.hide();
+    const formData = new FormData();
+    const file = files
+      ? files[0]
+      : document.querySelector('#fileElem').files[0];
+    formData.append('image', file);
+
+    CardapioService.postUploadImagemProduto(formData, (res) => {
+      if (res.status === 'error') return app.mensagem(res.message);
+      app.mensagem(res.message, 'green');
+      CardapioController.obterProdutosCategoria(CATEGORIA_ID, true);
+    });
+  },
+
+  removeImagemProduto: () => {
+    $('#abrirModalRemoverImagemProduto').modal('hide');
+    const data = { idproduto: PRODUTO_ID };
+    CardapioService.postRemoveImagemProduto(data, (res) => {
+      if (res.status === 'error') return app.mensagem(res.message);
+      app.mensagem(res.message, 'green');
+      CardapioController.obterProdutosCategoria(CATEGORIA_ID, true);
+    });
+  },
+
+  abrirModalRemoverProduto: (idcategoria, idproduto) => {
+    CATEGORIA_ID = idcategoria;
+    PRODUTO_ID = idproduto;
+
+    $('#modalRemoverProduto').modal('show');
+  },
+
+  removerProduto: () => {
+    $('#modalRemoverProduto').modal('hide');
+    const data = { idproduto: PRODUTO_ID };
+    CardapioService.postRemoverProduto(data, (res) => {
+      if (res.status === 'error') return app.mensagem(res.message);
+      app.mensagem(res.message, 'green');
+      CardapioController.obterProdutosCategoria(CATEGORIA_ID, true);
+    });
+  },
+
+  abrirModalDuplicarProduto: (idcategoria, idproduto) => {
+    CATEGORIA_ID = idcategoria;
+    PRODUTO_ID = idproduto;
+
+    $('#modalDuplicarProduto').modal({ backdrop: 'static' });
+    $('#modalDuplicarProduto').modal('show');
+  },
+
+  duplicarProduto: () => {
+    $('#modalDuplicarProduto').modal('hide');
+    const data = { idproduto: PRODUTO_ID };
+    CardapioService.postDuplicarProduto(data, (res) => {
+      if (res.status === 'error') return app.mensagem(res.message);
+      app.mensagem(res.message, 'green');
+      CardapioController.obterProdutosCategoria(CATEGORIA_ID, true);
+    });
+  },
+
+  modalRemoverCategoria: (idcategoria) => {
+    CATEGORIA_ID = idcategoria;
+    $('#modalRemoverCategoria').modal('show');
+  },
+
+  removerCategoria: () => {
+    $('#modalRemoverCategoria').modal('hide');
+    const data = { idcategoria: CATEGORIA_ID };
+    CardapioService.postRemoverCategoria(data, (res) => {
+      if (res.status === 'error') return app.mensagem(res.message);
+      app.mensagem(res.message, 'green');
+      CardapioController.obterCategorias();
+    });
   },
 };
 
@@ -216,13 +455,9 @@ const CardapioTemplates = {
                             <i class="fas fa-pencil-alt"></i>
                           </a>
 
-                          <a href="#!" class="icon-action" data-toggle="tooltip" data-placement="top" title="Duplicar" 
-                          onclick="cardapio.abrirModalDuplicarCategoria('\${id}')">
-                            <i class="far fa-copy"></i>
-                          </a>
 
                           <a href="#!" class="icon-action" data-toggle="tooltip" data-placement="top" title="Remover" 
-                          onclick="cardapio.abrirModalRemoverCategoria('\${id}')">
+                          onclick="cardapio.modalRemoverCategoria('\${id}')">
                             <i class="fas fa-trash-alt"></i>
                           </a>
                         </div>
@@ -314,4 +549,19 @@ window.cardapio = {
   editarCategoria: CardapioController.editarCategoria,
   salvarCategoria: CardapioController.salvarCategoria,
   obterProdutosCategoria: CardapioController.obterProdutosCategoria,
+  abrirModalAdicionarProduto: CardapioController.abrirModalAdicionarProduto,
+  salvarProduto: CardapioController.salvarProduto,
+  editarProduto: CardapioController.editarProduto,
+  uploadImagemProduto: CardapioController.uploadImagemProduto,
+  removeImagemProduto: CardapioController.removeImagemProduto,
+  abrirModalRemoverImagemProduto:
+    CardapioController.abrirModalRemoverImagemProduto,
+  abrirModalEditarImagemProduto:
+    CardapioController.abrirModalEditarImagemProduto,
+  abrirModalRemoverProduto: CardapioController.abrirModalRemoverProduto,
+  removerProduto: CardapioController.removerProduto,
+  abrirModalDuplicarProduto: CardapioController.abrirModalDuplicarProduto,
+  duplicarProduto: CardapioController.duplicarProduto,
+  modalRemoverCategoria: CardapioController.modalRemoverCategoria,
+  removerCategoria: CardapioController.removerCategoria,
 };
