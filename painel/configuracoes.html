@@ -1,419 +1,573 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Configurações</title>
-    <link rel="stylesheet" href="../css/imports.css">
-</head>
+    <link rel="stylesheet" href="../css/imports.css" />
+  </head>
 
-<body>
+  <body>
+    <div class="container-mensagens" id="container-mensagens"></div>
+    <div class="loader-full hidden">
+      <img src="../img/loader.png" width="100" />
+    </div>
 
     <section class="bg-menu">
-        <div class="menu-left">
-            <div class="logo">
-                <img src="../img/logo.png" width="100px">
-            </div>
-            <div class="menus">
-                <a href="./home.html" class="menu-item">
-                    <i class="fas fa-home"></i>
-                    Inicio
-                </a>
-                <a href="./pedidos.html" class="menu-item">
-                    <i class="fas fa-utensils"></i>
-                    Pedidos
-                </a>
-                <a href="./cardapio.html" class="menu-item">
-                    <i class="fas fa-book-open"></i>
-                    Cardapio
-                </a>
-                <a href="./configuracoes.html" class="menu-item active">
-                    <i class="fas fa-cog"></i>
-                    Configurações
-                </a>
-                <a href="./empresa.html" class="menu-item">
-                    <i class="fas fa-building"></i>
-                    Empresa
-                </a>
-                <a href="./relatorio.html" class="menu-item">
-                    <i class="fas fa-chart-line"></i>
-                    Relatorio
-                </a>
-            </div>
+      <div class="menu-left">
+        <div class="logo">
+          <img class="logo-empresa" width="100" />
         </div>
-        <div class="conteudo">
-
-            <div class="menu-top">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-12 d-flex align-items-center mt-4">
-                            <h1 class="title-page">
-                                <b>
-                                    <i class="fas fa-cog"></i>&nbsp; Configurações do Delivery
-                                </b>
-                            </h1>
-                            <div class="container-right">
-                                <div class="container-dados">
-                                    <p>Felipe Santana</p>
-                                    <span>felipe@gmail.com</span>
-                                </div>
-                                <a href="#" class="btn btn-white btn-sm">
-                                    <i class="fas fa-sign-out-alt"></i>&nbsp; Sair
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="conteudo-inner">
-                <div class="container">
-                    <div class="row">
-
-                        <div class="col-12">
-                            <div class="menus-config">
-                                <a href="#" class="btn btn-white btn-sm">
-                                    <i class="fas fa-shopping-bag"></i> Delivery e Retirada
-                                </a>
-
-                                <a href="#" class="btn btn-white btn-sm ">
-                                    <i class="fas fa-motorcycle"></i> Taxa de Entrega
-                                </a>
-
-                                <a href="#" class="btn btn-white btn-sm active">
-                                    <i class="fas fa-coins"></i> Formas de Pagamento
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="col-12 mt-5 hidden" id="delivery-retirada">
-
-                            <p class="title-categoria mb-0">
-                                <b>Selecione as opções de entrega da sua loja.</b>
-                            </p>
-
-                            <div class="container-group mb-3">
-                                <div class="card card-address cursor-default mt-3">
-                                    <div class="img-icon-details">
-                                        <i class="fas fa-box"></i>
-                                    </div>
-
-                                    <div class="infos config">
-                                        <p class="name mb-1"><b>Retirada</b></p>
-                                        <label class="switch">
-                                            <input type="checkbox" />
-                                            <span class="slider round"></span>
-                                            <span class="text mb-0">Desligado</span>
-                                        </label>
-                                    </div>
-
-                                    <div class="tempo disabled">
-                                        <div class="form-group">
-                                            <label><b>Tempo mínimo retirada (min)</b></label>
-                                            <input type="number" class="form-control" placeholder="20">
-                                        </div>
-                                        <div class="form-group">
-                                            <label><b>Tempo máximo retirada (min)</b></label>
-                                            <input type="number" class="form-control" placeholder="30">
-                                        </div>
-                                    </div>
-
-                                    <a href="#" class="btn btn-yellow btn-sm ms-4 disabled">
-                                        <i class="fas fa-check"></i>&nbsp; Salvar
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="container-group mb-3">
-                                <div class="card card-address cursor-default mt-3">
-                                    <div class="img-icon-details">
-                                        <i class="fas fa-motorcycle"></i>
-                                    </div>
-
-                                    <div class="infos config">
-                                        <p class="name mb-1"><b>Delivery</b></p>
-                                        <label class="switch">
-                                            <input type="checkbox" checked />
-                                            <span class="slider round"></span>
-                                            <span class="text mb-0">Ligado</span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div class="col-12 mt-5 hidden" id="taxa-entrega">
-                            <p class="title-categoria mb-0">
-                                <b>Selecione as opções de taxas de entrega.</b>
-                            </p>
-
-                            <div class="container-group inline mb-3">
-                                <div class="card mt-3">
-                                    <div class="group-select">
-                                        <div class="checks">
-                                            <label class="container-check">
-                                                <input type="checkbox" />
-                                                <span class="checkmark"></span>
-                                                Sem taxa
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="card mt-3">
-                                    <div class="group-select">
-                                        <div class="checks">
-                                            <label class="container-check">
-                                                <input type="checkbox" />
-                                                <span class="checkmark"></span>
-                                                Taxa única
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="card mt-3">
-                                    <div class="group-select">
-                                        <div class="checks">
-                                            <label class="container-check">
-                                                <input type="checkbox" checked />
-                                                <span class="checkmark"></span>
-                                                Taxa por distância
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="container-group mb-3 hidden" id="container-sem-taxa">
-                                <div class="card card-address mt-4 cursor-default">
-                                    <div class="infos">
-                                        <p class="name mb-0"><b>Nenhuma taxa sera cobrada na entrega.</b></p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="container-group mb-3 hidden" id="container-taxa-unica">
-
-                                <div class="card card-address cursor-default mt-4 pb-4 justify-content-start">
-                                    <div class="tempo">
-                                        <div class="form-group form-sm">
-                                            <label><b>Taxa (R$)</b></label>
-                                            <input type="text" class="form-control" placeholder="R$ 20,00" />
-                                        </div>
-
-                                        <div class="form-group me-3">
-                                            <label><b>Tempo mínimo entrega (min)</b></label>
-                                            <input type="text" class="form-control" placeholder="30" />
-                                        </div>
-
-                                        <div class="form-group me-3">
-                                            <label><b>Tempo máximo entrega (min)</b></label>
-                                            <input type="text" class="form-control" placeholder="90" />
-                                        </div>
-                                    </div>
-
-                                    <a href="#" class="btn btn-yellow btn-sm ms-4">
-                                        <i class="fas fa-check"></i> &nbsp; Salvar Alterações
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="container-group mb-3 " id="container-taxa-distancia">
-                                <div class="card card-address cursor-default mt-4 pb-4 ps-4 justify-content-start">
-                                    <div class="tempo">
-                                        <div class="form-group form-sm">
-                                            <label><b>Distância (km)</b></label>
-                                            <input type="text" class="form-control" placeholder="5" />
-                                        </div>
-                                        <div class="form-group form-sm">
-                                            <label><b>Taxa (R$)</b></label>
-                                            <input type="text" class="form-control" placeholder="R$ 20,00" />
-                                        </div>
-
-                                        <div class="form-group me-3">
-                                            <label><b>Tempo mínimo entrega (min)</b></label>
-                                            <input type="text" class="form-control" placeholder="30" />
-                                        </div>
-
-                                        <div class="form-group me-3">
-                                            <label><b>Tempo máximo entrega (min)</b></label>
-                                            <input type="text" class="form-control" placeholder="90" />
-                                        </div>
-                                    </div>
-                                    <a href="#" class="btn btn-yellow btn-sm ms-4">
-                                        <i class="fas fa-plus"></i> &nbsp; Adicionar
-                                    </a>
-                                </div>
-
-                                <p class="title-categoria mb-0 mt-5">
-                                    <b>Lista das taxas cadastradas.</b>
-                                </p>
-
-
-                                <div class="card mt-3">
-                                    <table class="table table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>Distância (km)</th>
-                                                <th>Taxa (R$)</th>
-                                                <th>Tempo de entrega (min)</th>
-                                                <th>Status</th>
-                                                <th>Ações</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>Até 5km</td>
-                                                <td>R$ 15,00</td>
-                                                <td>30 - 60</td>
-                                                <td>
-                                                    <span class="badge badge-success">Ativado</span>
-                                                </td>
-                                                <td>
-                                                    <div class="dropdown">
-                                                        <button class="btn btn-white btn-sm" type="button"
-                                                            data-bs-toggle="dropdown" aria-expanded="false">
-                                                            <i class="fas fa-ellipsis-v"></i>
-                                                        </button>
-                                                        <div class="dropdown-menu">
-                                                            <a href="#" class="dropdown-item">
-                                                                <i class="fas fa-check"></i>&nbsp; <b>Ativar</b>
-                                                            </a>
-
-                                                            <a href="#" class="dropdown-item color-red">
-                                                                <i class="fas fa-trash-alt"></i>&nbsp; <b>Remover</b>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-
-                                            <tr>
-                                                <td>Até 5km</td>
-                                                <td>R$ 15,00</td>
-                                                <td>30 - 60</td>
-                                                <td>
-                                                    <span class="badge badge-danger">Desativado</span>
-                                                </td>
-                                                <td>
-                                                    <div class="dropdown">
-                                                        <button class="btn btn-white btn-sm" type="button"
-                                                            data-bs-toggle="dropdown" aria-expanded="false">
-                                                            <i class="fas fa-ellipsis-v"></i>
-                                                        </button>
-                                                        <div class="dropdown-menu">
-                                                            <a href="#" class="dropdown-item">
-                                                                <i class="fas fa-check"></i>&nbsp; <b>Ativar</b>
-                                                            </a>
-
-                                                            <a href="#" class="dropdown-item color-red">
-                                                                <i class="fas fa-trash-alt"></i>&nbsp; <b>Remover</b>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-12 mt-5" id="forma-pagamento">
-                            <p class="title-categoria mb-0">
-                                <b>Selecione as formas de <span class="color-primary">pagamento na entrega</span></b>
-                            </p>
-
-                            <div class="container-group mb-3">
-                                <div class="card card-address cursor-default mt-3">
-                                    <div class="img-icon-details">
-                                        <i class="fas fa-dollar-sign"></i>
-                                    </div>
-                                    <div class="infos">
-                                        <p class="name mb-1"><b>PIX</b></p>
-                                    </div>
-                                    <label class="switch">
-                                        <input type="checkbox" />
-                                        <span class="slider round"></span>
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div class="container-group mb-3">
-                                <div class="card card-address cursor-default mt-3">
-                                    <div class="img-icon-details">
-                                        <i class="fas fa-coins"></i>
-                                    </div>
-                                    <div class="infos">
-                                        <p class="name mb-1"><b>Dinheiro</b></p>
-                                    </div>
-                                    <label class="switch">
-                                        <input type="checkbox" />
-                                        <span class="slider round"></span>
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div class="container-group mb-3">
-                                <div class="card card-address cursor-default mt-3">
-                                    <div class="img-icon-details">
-                                        <i class="fas fa-credit-card"></i>
-                                    </div>
-                                    <div class="infos">
-                                        <p class="name mb-1"><b>Cartao de credito</b></p>
-                                    </div>
-                                    <label class="switch">
-                                        <input type="checkbox" />
-                                        <span class="slider round"></span>
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div class="container-group mb-3">
-                                <div class="card card-address cursor-default mt-3">
-                                    <div class="img-icon-details">
-                                        <i class="fas fa-credit-card"></i>
-                                    </div>
-                                    <div class="infos">
-                                        <p class="name mb-1"><b>Cartao de debito</b></p>
-                                    </div>
-                                    <label class="switch">
-                                        <input type="checkbox" />
-                                        <span class="slider round"></span>
-                                    </label>
-                                </div>
-                            </div>
-
-                            <p class="title-categoria mb-0 mt-5">
-                                <b>Formas de <b class="color-primary">pagamento via aplicativo</b></b>
-                            </p>
-
-                            <div class="container-group mb-3 opacity-05">
-                                <div class="card card-address cursor-default mt-3">
-                                    <div class="img-icon-details">
-                                        <i class="fas fa-mobile-alt"></i>
-                                    </div>
-                                    <div class="infos">
-                                        <p class="name mb-1"><b>Em construção...</b></p>
-                                        <span class="text mb-0">Essa função sera liberada em breve</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
+        <div class="menus">
+          <a href="./home.html" class="menu-item">
+            <i class="fas fa-home"></i>
+            Inicio
+          </a>
+          <a href="./pedidos.html" class="menu-item">
+            <i class="fas fa-utensils"></i>
+            Pedidos
+          </a>
+          <a href="./cardapio.html" class="menu-item">
+            <i class="fas fa-book-open"></i>
+            Cardapio
+          </a>
+          <a href="./configuracoes.html" class="menu-item active">
+            <i class="fas fa-cog"></i>
+            Configurações
+          </a>
+          <a href="./empresa.html" class="menu-item">
+            <i class="fas fa-building"></i>
+            Empresa
+          </a>
+          <a href="./relatorio.html" class="menu-item">
+            <i class="fas fa-chart-line"></i>
+            Relatorio
+          </a>
         </div>
+      </div>
+      <div class="conteudo">
+        <div class="menu-top">
+          <div class="container">
+            <div class="row">
+              <div class="col-12 d-flex align-items-center mt-4">
+                <h1 class="title-page">
+                  <b>
+                    <i class="fas fa-cog"></i>&nbsp; Configurações do Delivery
+                  </b>
+                </h1>
+                <div class="container-right">
+                  <div class="container-dados">
+                    <p class="nome-empresa"></p>
+                    <span class="email-empresa"></span>
+                  </div>
+                  <a
+                    href="#"
+                    class="btn btn-white btn-sm"
+                    onclick="app.logout()"
+                  >
+                    <i class="fas fa-sign-out-alt"></i>&nbsp; Sair
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="conteudo-inner">
+          <div class="container">
+            <div class="row">
+              <div class="col-12">
+                <div class="menus-config">
+                  <a
+                    href="#"
+                    class="btn btn-white btn-sm tab-content active"
+                    id="tab-delivery-retirada"
+                    onclick="configuracoes.openTab('delivery-retirada')"
+                  >
+                    <i class="fas fa-shopping-bag"></i> Delivery e Retirada
+                  </a>
+
+                  <a
+                    href="#"
+                    class="btn btn-white btn-sm tab-content"
+                    id="tab-taxa-entrega"
+                    onclick="configuracoes.openTab('taxa-entrega')"
+                  >
+                    <i class="fas fa-motorcycle"></i> Taxa de Entrega
+                  </a>
+
+                  <a
+                    href="#"
+                    class="btn btn-white btn-sm tab-content"
+                    id="tab-forma-pagamento"
+                    onclick="configuracoes.openTab('forma-pagamento')"
+                  >
+                    <i class="fas fa-coins"></i> Formas de Pagamento
+                  </a>
+                </div>
+              </div>
+
+              <div class="col-12 mt-5 tab-item" id="delivery-retirada">
+                <p class="title-categoria mb-0">
+                  <b>Selecione as opções de entrega da sua loja.</b>
+                </p>
+
+                <div class="container-group mb-3">
+                  <div class="card card-address cursor-default mt-3">
+                    <div class="img-icon-details">
+                      <i class="fas fa-box"></i>
+                    </div>
+
+                    <div class="infos config">
+                      <p class="name mb-1"><b>Retirada</b></p>
+                      <label class="switch">
+                        <input
+                          type="checkbox"
+                          id="checkOpcaoRetirada"
+                          onchange="configuracoes.toggleAtivoEntrega('Retirada')"
+                        />
+                        <span class="slider round"></span>
+                        <span class="text mb-0" id="lblSwitchRetirada"
+                          >Desligado</span
+                        >
+                      </label>
+                    </div>
+
+                    <div class="tempo disabled" id="containerTempoRetirada">
+                      <div class="form-group">
+                        <label for="txtTempoMinimoRetirada"
+                          ><b>Tempo mínimo retirada (min)</b></label
+                        >
+                        <input
+                          id="txtTempoMinimoRetirada"
+                          type="number"
+                          class="form-control"
+                          disabled
+                        />
+                      </div>
+                      <div class="form-group">
+                        <label for="txtTempoMaximoRetirada"
+                          ><b>Tempo máximo retirada (min)</b></label
+                        >
+                        <input
+                          id="txtTempoMaximoRetirada"
+                          type="number"
+                          class="form-control"
+                          disabled
+                        />
+                      </div>
+                    </div>
+
+                    <a
+                      href="#"
+                      class="btn btn-yellow btn-sm ms-4 disabled"
+                      id="btn-salvarOpcaoRetirada"
+                      onclick="configuracoes.salvarOpcaoEntrega('Retirada')"
+                    >
+                      <i class="fas fa-check"></i>&nbsp; Salvar
+                    </a>
+                  </div>
+                </div>
+
+                <div class="container-group mb-3">
+                  <div class="card card-address cursor-default mt-3">
+                    <div class="img-icon-details">
+                      <i class="fas fa-motorcycle"></i>
+                    </div>
+
+                    <div class="infos config">
+                      <p class="name mb-1"><b>Delivery</b></p>
+                      <label class="switch">
+                        <input
+                          type="checkbox"
+                          id="checkOpcaoDelivery"
+                          onchange="configuracoes.toggleAtivoEntrega('Delivery')"
+                        />
+                        <span class="slider round"></span>
+                        <span class="text mb-0" id="lblSwitchDelivery"
+                          >Ligado</span
+                        >
+                      </label>
+                    </div>
+
+                    <div class="tempo disabled" id="containerTempoDelivery">
+                      <div class="form-group">
+                        <label for="txtTempoMinimoDelivery"
+                          ><b>Tempo mínimo delivery (min)</b></label
+                        >
+                        <input
+                          id="txtTempoMinimoDelivery"
+                          type="number"
+                          class="form-control"
+                          disabled
+                        />
+                      </div>
+                      <div class="form-group">
+                        <label for="txtTempoMaximoDelivery"
+                          ><b>Tempo máximo Delivery (min)</b></label
+                        >
+                        <input
+                          id="txtTempoMaximoDelivery"
+                          type="number"
+                          class="form-control"
+                          disabled
+                        />
+                      </div>
+                    </div>
+
+                    <a
+                      href="#"
+                      class="btn btn-yellow btn-sm ms-4 disabled"
+                      id="btn-salvarOpcaoDelivery"
+                      onclick="configuracoes.salvarOpcaoEntrega('Delivery')"
+                    >
+                      <i class="fas fa-check"></i>&nbsp; Salvar
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12 mt-5 tab-item hidden" id="taxa-entrega">
+                <p class="title-categoria mb-0">
+                  <b>Selecione as opções de taxas de entrega.</b>
+                </p>
+
+                <div class="container-group inline mb-3">
+                  <div class="card mt-3">
+                    <div class="group-select">
+                      <div class="checks">
+                        <label class="container-check">
+                          <input type="checkbox" />
+                          <span class="checkmark"></span>
+                          Sem taxa
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="card mt-3">
+                    <div class="group-select">
+                      <div class="checks">
+                        <label class="container-check">
+                          <input type="checkbox" />
+                          <span class="checkmark"></span>
+                          Taxa única
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="card mt-3">
+                    <div class="group-select">
+                      <div class="checks">
+                        <label class="container-check">
+                          <input type="checkbox" checked />
+                          <span class="checkmark"></span>
+                          Taxa por distância
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  class="container-group mb-3 hidden"
+                  id="container-sem-taxa"
+                >
+                  <div class="card card-address mt-4 cursor-default">
+                    <div class="infos">
+                      <p class="name mb-0">
+                        <b>Nenhuma taxa sera cobrada na entrega.</b>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  class="container-group mb-3 hidden"
+                  id="container-taxa-unica"
+                >
+                  <div
+                    class="card card-address cursor-default mt-4 pb-4 justify-content-start"
+                  >
+                    <div class="tempo">
+                      <div class="form-group form-sm">
+                        <label><b>Taxa (R$)</b></label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="R$ 20,00"
+                        />
+                      </div>
+
+                      <div class="form-group me-3">
+                        <label><b>Tempo mínimo entrega (min)</b></label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="30"
+                        />
+                      </div>
+
+                      <div class="form-group me-3">
+                        <label><b>Tempo máximo entrega (min)</b></label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="90"
+                        />
+                      </div>
+                    </div>
+
+                    <a href="#" class="btn btn-yellow btn-sm ms-4">
+                      <i class="fas fa-check"></i> &nbsp; Salvar Alterações
+                    </a>
+                  </div>
+                </div>
+
+                <div class="container-group mb-3" id="container-taxa-distancia">
+                  <div
+                    class="card card-address cursor-default mt-4 pb-4 ps-4 justify-content-start"
+                  >
+                    <div class="tempo">
+                      <div class="form-group form-sm">
+                        <label><b>Distância (km)</b></label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="5"
+                        />
+                      </div>
+                      <div class="form-group form-sm">
+                        <label><b>Taxa (R$)</b></label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="R$ 20,00"
+                        />
+                      </div>
+
+                      <div class="form-group me-3">
+                        <label><b>Tempo mínimo entrega (min)</b></label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="30"
+                        />
+                      </div>
+
+                      <div class="form-group me-3">
+                        <label><b>Tempo máximo entrega (min)</b></label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="90"
+                        />
+                      </div>
+                    </div>
+                    <a href="#" class="btn btn-yellow btn-sm ms-4">
+                      <i class="fas fa-plus"></i> &nbsp; Adicionar
+                    </a>
+                  </div>
+
+                  <p class="title-categoria mb-0 mt-5">
+                    <b>Lista das taxas cadastradas.</b>
+                  </p>
+
+                  <div class="card mt-3">
+                    <table class="table table-hover">
+                      <thead>
+                        <tr>
+                          <th>Distância (km)</th>
+                          <th>Taxa (R$)</th>
+                          <th>Tempo de entrega (min)</th>
+                          <th>Status</th>
+                          <th>Ações</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>Até 5km</td>
+                          <td>R$ 15,00</td>
+                          <td>30 - 60</td>
+                          <td>
+                            <span class="badge badge-success">Ativado</span>
+                          </td>
+                          <td>
+                            <div class="dropdown">
+                              <button
+                                class="btn btn-white btn-sm"
+                                type="button"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                              >
+                                <i class="fas fa-ellipsis-v"></i>
+                              </button>
+                              <div class="dropdown-menu">
+                                <a href="#" class="dropdown-item">
+                                  <i class="fas fa-check"></i>&nbsp;
+                                  <b>Ativar</b>
+                                </a>
+
+                                <a href="#" class="dropdown-item color-red">
+                                  <i class="fas fa-trash-alt"></i>&nbsp;
+                                  <b>Remover</b>
+                                </a>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+
+                        <tr>
+                          <td>Até 5km</td>
+                          <td>R$ 15,00</td>
+                          <td>30 - 60</td>
+                          <td>
+                            <span class="badge badge-danger">Desativado</span>
+                          </td>
+                          <td>
+                            <div class="dropdown">
+                              <button
+                                class="btn btn-white btn-sm"
+                                type="button"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                              >
+                                <i class="fas fa-ellipsis-v"></i>
+                              </button>
+                              <div class="dropdown-menu">
+                                <a href="#" class="dropdown-item">
+                                  <i class="fas fa-check"></i>&nbsp;
+                                  <b>Ativar</b>
+                                </a>
+
+                                <a href="#" class="dropdown-item color-red">
+                                  <i class="fas fa-trash-alt"></i>&nbsp;
+                                  <b>Remover</b>
+                                </a>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12 mt-5 tab-item hidden" id="forma-pagamento">
+                <p class="title-categoria mb-0">
+                  <b
+                    >Selecione as formas de
+                    <span class="color-primary">pagamento na entrega</span></b
+                  >
+                </p>
+
+                <div class="container-group mb-3">
+                  <div class="card card-address cursor-default mt-3">
+                    <div class="img-icon-details">
+                      <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="infos">
+                      <p class="name mb-1"><b>PIX</b></p>
+                    </div>
+                    <label class="switch">
+                      <input
+                        type="checkbox"
+                        id="checkFormaPIX"
+                        onchange="configuracoes.toggleAtivoPagamento(1, 'PIX')"
+                      />
+                      <span class="slider round"></span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="container-group mb-3">
+                  <div class="card card-address cursor-default mt-3">
+                    <div class="img-icon-details">
+                      <i class="fas fa-coins"></i>
+                    </div>
+                    <div class="infos">
+                      <p class="name mb-1"><b>Dinheiro</b></p>
+                    </div>
+                    <label class="switch">
+                      <input
+                        type="checkbox"
+                        id="checkFormaDinheiro"
+                        onchange="configuracoes.toggleAtivoPagamento(2, 'Dinheiro')"
+                      />
+                      <span class="slider round"></span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="container-group mb-3">
+                  <div class="card card-address cursor-default mt-3">
+                    <div class="img-icon-details">
+                      <i class="fas fa-credit-card"></i>
+                    </div>
+                    <div class="infos">
+                      <p class="name mb-1"><b>Cartao de credito</b></p>
+                    </div>
+                    <label class="switch">
+                      <input
+                        type="checkbox"
+                        id="checkFormaCartaoCredito"
+                        onchange="configuracoes.toggleAtivoPagamento(3, 'CartaoCredito')"
+                      />
+                      <span class="slider round"></span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="container-group mb-3">
+                  <div class="card card-address cursor-default mt-3">
+                    <div class="img-icon-details">
+                      <i class="fas fa-credit-card"></i>
+                    </div>
+                    <div class="infos">
+                      <p class="name mb-1"><b>Cartao de debito</b></p>
+                    </div>
+                    <label class="switch">
+                      <input
+                        type="checkbox"
+                        id="checkFormaCartaoDebito"
+                        onchange="configuracoes.toggleAtivoPagamento(4, 'CartaoDebito')"
+                      />
+                      <span class="slider round"></span>
+                    </label>
+                  </div>
+                </div>
+
+                <p class="title-categoria mb-0 mt-5">
+                  <b
+                    >Formas de
+                    <b class="color-primary">pagamento via aplicativo</b></b
+                  >
+                </p>
+
+                <div class="container-group mb-3 opacity-05">
+                  <div class="card card-address cursor-default mt-3">
+                    <div class="img-icon-details">
+                      <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <div class="infos">
+                      <p class="name mb-1"><b>Em construção...</b></p>
+                      <span class="text mb-0"
+                        >Essa função sera liberada em breve</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
 
-
-
-
     <script type="text/javascript" src="../js/bootstrap.bundle.min.js"></script>
-</body>
-
+    <script type="text/javascript" src="./js/configuracoes.js"></script>
+    <script type="text/javascript" src="../js/app.js"></script>
+  </body>
 </html>
