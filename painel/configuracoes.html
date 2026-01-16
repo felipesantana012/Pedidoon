@@ -237,7 +237,12 @@
                     <div class="group-select">
                       <div class="checks">
                         <label class="container-check">
-                          <input type="checkbox" />
+                          <input
+                            class="input-taxa-check"
+                            type="checkbox"
+                            id="checkSemTaxa"
+                            onchange="configuracoes.openTabTaxa('container-sem-taxa', 'checkSemTaxa')"
+                          />
                           <span class="checkmark"></span>
                           Sem taxa
                         </label>
@@ -249,7 +254,12 @@
                     <div class="group-select">
                       <div class="checks">
                         <label class="container-check">
-                          <input type="checkbox" />
+                          <input
+                            class="input-taxa-check"
+                            type="checkbox"
+                            id="checkTaxaUnica"
+                            onchange="configuracoes.openTabTaxa('container-taxa-unica', 'checkTaxaUnica')"
+                          />
                           <span class="checkmark"></span>
                           Taxa única
                         </label>
@@ -261,7 +271,12 @@
                     <div class="group-select">
                       <div class="checks">
                         <label class="container-check">
-                          <input type="checkbox" checked />
+                          <input
+                            class="input-taxa-check"
+                            type="checkbox"
+                            id="checkTaxaDistancia"
+                            onchange="configuracoes.openTabTaxa('container-taxa-distancia', 'checkTaxaDistancia')"
+                          />
                           <span class="checkmark"></span>
                           Taxa por distância
                         </label>
@@ -270,8 +285,9 @@
                   </div>
                 </div>
 
+                <!-- Sem Taxa -->
                 <div
-                  class="container-group mb-3 hidden"
+                  class="container-group mb-3 tab-item-taxa hidden"
                   id="container-sem-taxa"
                 >
                   <div class="card card-address mt-4 cursor-default">
@@ -283,8 +299,9 @@
                   </div>
                 </div>
 
+                <!-- Taxa Unica -->
                 <div
-                  class="container-group mb-3 hidden"
+                  class="container-group mb-3 tab-item-taxa hidden"
                   id="container-taxa-unica"
                 >
                   <div
@@ -292,80 +309,107 @@
                   >
                     <div class="tempo">
                       <div class="form-group form-sm">
-                        <label><b>Taxa (R$)</b></label>
+                        <label><b>Taxa (R$)*</b></label>
                         <input
                           type="text"
-                          class="form-control"
+                          class="form-control money"
                           placeholder="R$ 20,00"
+                          id="inputTaxaUnicaValor"
                         />
                       </div>
 
                       <div class="form-group me-3">
                         <label><b>Tempo mínimo entrega (min)</b></label>
                         <input
-                          type="text"
+                          type="number"
                           class="form-control"
                           placeholder="30"
+                          id="inputTaxaUnicaTempoMinimo"
                         />
                       </div>
 
                       <div class="form-group me-3">
                         <label><b>Tempo máximo entrega (min)</b></label>
                         <input
-                          type="text"
+                          type="number"
                           class="form-control"
                           placeholder="90"
+                          id="inputTaxaUnicaTempoMaximo"
                         />
                       </div>
                     </div>
 
-                    <a href="#" class="btn btn-yellow btn-sm ms-4">
+                    <a
+                      href="#"
+                      class="btn btn-yellow btn-sm ms-4"
+                      onclick="configuracoes.salvarTaxaUnica()"
+                    >
                       <i class="fas fa-check"></i> &nbsp; Salvar Alterações
                     </a>
                   </div>
                 </div>
 
-                <div class="container-group mb-3" id="container-taxa-distancia">
+                <!-- Taxa por Distancia -->
+                <div
+                  class="container-group mb-3 tab-item-taxa hidden"
+                  id="container-taxa-distancia"
+                >
                   <div
                     class="card card-address cursor-default mt-4 pb-4 ps-4 justify-content-start"
                   >
                     <div class="tempo">
                       <div class="form-group form-sm">
-                        <label><b>Distância (km)</b></label>
+                        <label for="txtTaxaDistancia"
+                          ><b>Distância (km)</b></label
+                        >
                         <input
-                          type="text"
+                          type="number"
                           class="form-control"
                           placeholder="5"
+                          id="txtTaxaDistanciaKm"
                         />
                       </div>
                       <div class="form-group form-sm">
-                        <label><b>Taxa (R$)</b></label>
+                        <label for="txtTaxaDistanciaValor"
+                          ><b>Taxa (R$)</b></label
+                        >
                         <input
+                          id="txtTaxaDistanciaValor"
                           type="text"
-                          class="form-control"
+                          class="form-control money"
                           placeholder="R$ 20,00"
                         />
                       </div>
 
                       <div class="form-group me-3">
-                        <label><b>Tempo mínimo entrega (min)</b></label>
+                        <label for="txtTaxaDistanciaTempoMinimo"
+                          ><b>Tempo mínimo entrega (min)</b></label
+                        >
                         <input
-                          type="text"
+                          id="txtTaxaDistanciaTempoMinimo"
+                          type="number"
                           class="form-control"
                           placeholder="30"
                         />
                       </div>
 
                       <div class="form-group me-3">
-                        <label><b>Tempo máximo entrega (min)</b></label>
+                        <label for="txtTaxaDistanciaTempoMaximo"
+                          ><b>Tempo máximo entrega (min)</b></label
+                        >
                         <input
-                          type="text"
+                          id="txtTaxaDistanciaTempoMaximo"
+                          type="number"
                           class="form-control"
                           placeholder="90"
                         />
                       </div>
                     </div>
-                    <a href="#" class="btn btn-yellow btn-sm ms-4">
+                    <a
+                      href="#!"
+                      class="btn btn-yellow btn-sm ms-4"
+                      onclick="configuracoes.addTaxaPorDistancia()"
+                    >
                       <i class="fas fa-plus"></i> &nbsp; Adicionar
                     </a>
                   </div>
@@ -380,76 +424,12 @@
                         <tr>
                           <th>Distância (km)</th>
                           <th>Taxa (R$)</th>
-                          <th>Tempo de entrega (min)</th>
+                          <th>Tempo de entrega</th>
                           <th>Status</th>
                           <th>Ações</th>
                         </tr>
                       </thead>
-                      <tbody>
-                        <tr>
-                          <td>Até 5km</td>
-                          <td>R$ 15,00</td>
-                          <td>30 - 60</td>
-                          <td>
-                            <span class="badge badge-success">Ativado</span>
-                          </td>
-                          <td>
-                            <div class="dropdown">
-                              <button
-                                class="btn btn-white btn-sm"
-                                type="button"
-                                data-bs-toggle="dropdown"
-                                aria-expanded="false"
-                              >
-                                <i class="fas fa-ellipsis-v"></i>
-                              </button>
-                              <div class="dropdown-menu">
-                                <a href="#" class="dropdown-item">
-                                  <i class="fas fa-check"></i>&nbsp;
-                                  <b>Ativar</b>
-                                </a>
-
-                                <a href="#" class="dropdown-item color-red">
-                                  <i class="fas fa-trash-alt"></i>&nbsp;
-                                  <b>Remover</b>
-                                </a>
-                              </div>
-                            </div>
-                          </td>
-                        </tr>
-
-                        <tr>
-                          <td>Até 5km</td>
-                          <td>R$ 15,00</td>
-                          <td>30 - 60</td>
-                          <td>
-                            <span class="badge badge-danger">Desativado</span>
-                          </td>
-                          <td>
-                            <div class="dropdown">
-                              <button
-                                class="btn btn-white btn-sm"
-                                type="button"
-                                data-bs-toggle="dropdown"
-                                aria-expanded="false"
-                              >
-                                <i class="fas fa-ellipsis-v"></i>
-                              </button>
-                              <div class="dropdown-menu">
-                                <a href="#" class="dropdown-item">
-                                  <i class="fas fa-check"></i>&nbsp;
-                                  <b>Ativar</b>
-                                </a>
-
-                                <a href="#" class="dropdown-item color-red">
-                                  <i class="fas fa-trash-alt"></i>&nbsp;
-                                  <b>Remover</b>
-                                </a>
-                              </div>
-                            </div>
-                          </td>
-                        </tr>
-                      </tbody>
+                      <tbody id="listaTaxaDistancia"></tbody>
                     </table>
                   </div>
                 </div>
@@ -566,8 +546,52 @@
       </div>
     </section>
 
+    <div
+      id="modalRemoverTaxaDistancia"
+      class="modal fade modal-form"
+      tabindex="-1"
+      role="dialog"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">
+              <i class="fas fa-trash-alt"></i>&nbsp;
+              <b>Remover Taxa por distancia</b>
+            </h5>
+          </div>
+          <div class="modal-body">
+            <div class="row mb-5">
+              <div class="col-12">
+                <p>Tem certeza que deseja <b>remover</b> esta taxa?</p>
+              </div>
+            </div>
+            <div class="footer-btn">
+              <a
+                href="#!"
+                class="btn btn-remove btn-sm"
+                onclick="configuracoes.removerTaxaDistancia()"
+              >
+                <i class="fas fa-trash-alt"></i>&nbsp; Remover Taxa</a
+              >
+              <button
+                type="button"
+                data-bs-dismiss="modal"
+                aria-label="closed"
+                class="btn btn-yellow btn-sm"
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
     <script type="text/javascript" src="../js/bootstrap.bundle.min.js"></script>
-    <script type="text/javascript" src="./js/configuracoes.js"></script>
+    <script type="text/javascript" src="../js/jquery.mask.js"></script>
     <script type="text/javascript" src="../js/app.js"></script>
+    <script type="text/javascript" src="./js/configuracoes.js"></script>
   </body>
 </html>
