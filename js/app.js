@@ -1,7 +1,9 @@
 const SESSION_KEY = 'sessao_pedidoon';
 
 var app = {
-  event: {},
+  init: (home = false) => {
+    app.validarEmpresaAberta(home);
+  },
 
   get: (url, callbackSuccess, callbackError, login = false) => {
     try {
@@ -176,5 +178,39 @@ var app = {
         logoElement.src = '/public/images/default.jpg';
       }
     }
+  },
+
+  validarEmpresaAberta: (home = false) => {
+    app.get(
+      '/empresa/open',
+      (res) => {
+        if (home) {
+          document.querySelector('.status-open').classList.remove('hidden');
+        }
+        if (res.status == 'error') {
+          if (home) {
+            document.querySelector('.status-open').classList.add('closed');
+            document.querySelector('#lblLojaAberta').innerText = 'Fechado';
+          }
+          document.querySelector('#menu-bottom').remove();
+          document
+            .querySelector('#menu-bottom-closed')
+            .classList.remove('hidden');
+          return;
+        }
+
+        if (home) {
+          document.querySelector('.status-open').classList.remove('closed');
+          document.querySelector('#lblLojaAberta').innerText = 'Aberto';
+        }
+        document.querySelector('#menu-bottom').classList.remove('hidden');
+        document.querySelector('#menu-bottom-closed').remove();
+      },
+      (status, error) => {
+        app.mensagem('Erro ao verificar status da empresa. Atualize a página.');
+        console.log('Erro ' + status + ': ' + error);
+      },
+      true,
+    );
   },
 };

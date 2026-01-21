@@ -1,88 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pizzaria Maluca</title>
-    <link rel="stylesheet" href="./css/imports.css">
+    <link rel="stylesheet" href="./css/imports.css" />
+  </head>
 
-</head>
-
-<body>
+  <body>
+    <div class="loader-full hidden">
+      <img src="./img/loader.png" width="100" />
+    </div>
 
     <div class="bg-top"></div>
 
     <header class="width-fix mt-5">
-        <div class="card">
-            <div class="d-flex">
-                <div class="container-img"></div>
-                <div class="infos">
-                    <h1><b>Pizzaria Maluca</b></h1>
-                    <div class="infos-sub">
-                        <p class="status-open"><i class="fa fa-clock"></i>Aberta</p>
-                        <a href="./sobre.html" class="link">Ver mais</a>
-                    </div>
-                </div>
+      <div class="card">
+        <div class="d-flex">
+          <div class="container-img" id="imgLogoEmpresa"></div>
+          <div class="infos">
+            <h1><b id="lblNomeEmpresa"></b></h1>
+            <div class="infos-sub">
+              <p class="status-open hidden">
+                <i class="fa fa-clock"></i><span id="lblLojaAberta"></span>
+              </p>
+              <a href="./sobre.html" class="link">Ver mais</a>
             </div>
+          </div>
         </div>
+      </div>
     </header>
 
     <section class="categoria width-fix mt-4">
-        <div class="container-menu" id="listaCategorias">
-            <a href="#" class="item-categoria btn btn-white btn-sm mb-3 active">
-                <i class="fas fa-pizza-slice"></i>Pizzas tradicionais
-            </a>
-            <a href="#" class="item-categoria btn btn-white btn-sm mb-3">
-                <i class="fas fa-pizza-slice"></i>Pizzas salgadas
-            </a>
-            <a href="#" class="item-categoria btn btn-white btn-sm mb-3">
-                <i class="fas fa-pizza-slice"></i>Pizzas doces
-            </a>
-            <a href="#" class="item-categoria btn btn-white btn-sm mb-3">
-                <i class="fas fa-cocktail"></i>Bebidas
-            </a>
-        </div>
-
+      <div class="container-menu" id="listaCategorias"></div>
     </section>
 
-    <section class="lista width-fix mt-0 pb-5" id="listaItensCardapio">
-        <div class="container-grup mb-5">
-            <p class="title-categoria"><b>Pizzas Tradicionais</b></p>
-            <div class="card mb-2 item-cardapio">
-                <div class="d-flex">
-                    <div class="container-img-produto"
-                        style="background-image: url('./img/calabresa.jpg'); background-size: cover;"></div>
-                    <div class="infos-produto">
-                        <p class="name"><b>Calabresa</b></p>
-                        <p class="description">Molho de tomate, mussarela, cebola, calabresa, catupiry, tomate, oregano
-                            e azeitonas</p>
-                        <p class="price"><b>R$ 39,90</b></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    <section
+      class="lista width-fix mt-0 pb-5"
+      id="listaItensCardapio"
+    ></section>
 
     <section class="menu-bottom" id="menu-bottom">
-        <a href="./index.html" class="menu-bottom-item active">
-            <i class="fas fa-book-open"></i>Cardapio
-        </a>
-        <a href="./pedido.html" class="menu-bottom-item">
-            <i class="fas fa-utensils"></i>Pedido
-        </a>
-        <a href="./carrinho.html" class="menu-bottom-item">
-            <span class="badge-total-carrinho">2</span>
-            <!-- <i class="fas fa-shopping-cart"></i> -->
-            Carrinho
-        </a>
+      <a href="./index.html" class="menu-bottom-item active">
+        <i class="fas fa-book-open"></i>Cardapio
+      </a>
+      <a href="./pedido.html" class="menu-bottom-item">
+        <i class="fas fa-utensils"></i>Pedido
+      </a>
+      <a href="./carrinho.html" class="menu-bottom-item">
+        <span class="badge-total-carrinho">2</span>
+        <!-- <i class="fas fa-shopping-cart"></i> -->
+        Carrinho
+      </a>
     </section>
 
     <section class="menu-bottom disabled hidden" id="menu-bottom-closed">
-        <p class="mb-0"><b>Loja fechada no momento</b></p>
+      <p class="mb-0"><b>Loja fechada no momento</b></p>
     </section>
     <script type="text/javascript" src="./js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="./js/app.js"></script>
+    <script type="text/javascript" src="./js/icones-categoria.js"></script>
     <script type="text/javascript" src="./js/cardapio.js"></script>
-</body>
-
+  </body>
 </html>
