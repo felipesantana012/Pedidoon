@@ -150,7 +150,7 @@ const CardapioController = {
   },
 
   abrirProduto: (id) => {
-    window.location.href = `/item.html?produto=${id}`;
+    window.location.href = `/item.html?idproduto=${id}`;
   },
 
   validarCategoriaScroll: () => {
